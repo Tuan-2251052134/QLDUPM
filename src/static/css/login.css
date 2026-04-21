@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+}
+
+.form {
+  padding: 68px 80px;
+  flex: 1;
+}
+
+.title {
+  line-height: 36px;
+  font-weight: 600;
+  font-size: 30px;
+  color: #191c1d;
+}
+
+.subtitle {
+  margin-top: 8px;
+}
+
+.inputRow {
+  display: flex;
+  gap: 24px;
+}
+
+.inputContainer {
+  width: 100%;
+}
+
+.inputTitle {
+  margin-left: 4px;
+  margin-bottom: 8px;
+  line-height: 20px;
+}
+
+.input {
+  background-color: #e1e3e4;
+  color: #727784;
+  padding: 15px;
+  height: 48px;
+  border-radius: 8px;
+  border-width: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.roleTitle {
+  line-height: 20px;
+  margin-bottom: 12px;
+}
+
+.roleOptionsContainer {
+  display: flex;
+  gap: 16px;
+}
+
+.roleOption {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #004e9f;
+  border-radius: 8px;
+  color: white;
+  gap: 12px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.mt-64 {
+  margin-top: 64px;
+}

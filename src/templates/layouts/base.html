@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+      body {
+        margin: 0px;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    {% include "layouts/header.html" %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    {% include "layouts/footer.html" %}
+  </body>
+</html>

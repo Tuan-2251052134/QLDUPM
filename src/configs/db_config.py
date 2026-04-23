@@ -1,4 +1,4 @@
-from main import app
+from __init__ import app
 from flask_sqlalchemy import SQLAlchemy
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:lkjhg09876@localhost:3306/doctor_appointment_booking"

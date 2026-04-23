@@ -1,86 +1,105 @@
 .container {
-  display: flex;
+  background-color: #f3f4f5;
+  padding: 33px 90px;
+}
+
+.banner {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  font-family: "Manrope", sans-serif;
+.formContainer {
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
 }
 
 .form {
-  padding: 68px 80px;
-  flex: 1;
+  padding: 64px;
+  width: 100%;
+  background-color: #ffffff;
 }
 
 .title {
-  line-height: 36px;
-  font-weight: 600;
+  color: #004e9f;
   font-size: 30px;
-  color: #191c1d;
+  line-height: 36px;
 }
 
 .subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  color: #414753;
   margin-top: 8px;
 }
 
-.inputRow {
-  display: flex;
-  gap: 24px;
+.inputTitle {
+  margin-top: 40px;
+  margin-left: 4px;
 }
 
 .inputContainer {
+  padding: 0px 16px;
+  display: flex;
+  height: 56px;
+  align-items: center;
+  background-color: #e1e3e4;
+  margin-top: 8px;
+  border-radius: 8px;
+  gap: 11px;
   width: 100%;
-}
-
-.inputTitle {
-  margin-left: 4px;
-  margin-bottom: 8px;
-  line-height: 20px;
+  box-sizing: border-box;
 }
 
 .input {
+  line-height: 19px;
+  width: 100%;
   background-color: #e1e3e4;
-  color: #727784;
-  padding: 15px;
-  height: 48px;
-  border-radius: 8px;
   border-width: 0px;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 16px;
 }
 
-.roleTitle {
-  line-height: 20px;
-  margin-bottom: 12px;
-}
-
-.roleOptionsContainer {
-  display: flex;
-  gap: 16px;
-}
-
-.roleOption {
-  width: 100%;
+.button {
+  margin-top: 24px;
   height: 56px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #004e9f;
+  font-size: 16px;
+  border-width: 0px;
   border-radius: 8px;
-  color: white;
-  gap: 12px;
 }
 
-.mt-40 {
+.loginButton {
+  color: #ffffff;
+  background-color: #004e9f;
+}
+
+.registerButton {
+  color: #191c1d;
+  background-color: #e7e8e9;
+  margin-top: 40px;
+  text-decoration: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-top: 40px;
 }
 
-.mt-24 {
-  margin-top: 24px;
+.line {
+  background-color: rgba(193, 198, 213, 0.3);
+  height: 1px;
+  width: 100%;
 }
 
-.mt-64 {
-  margin-top: 64px;
+.dividerContent {
+  color: #727784;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.error {
+  color: red;
 }

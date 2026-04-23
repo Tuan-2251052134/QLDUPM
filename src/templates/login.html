@@ -1,87 +1,33 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="/static/css/login.css" rel="stylesheet" />
-  </head>
-  <body>
-    <div class="container">
-      <img class="image" src="/static/assets/banner.png" />
-      <form class="form">
-        <div class="title">Tạo tài khoản mới</div>
-        <div class="subtitle">
-          Vui lòng điền các thông tin dưới đây để bắt đầu hành trình sức khỏe
-          của bạn.
-        </div>
-        <div class="inputRow mt-40">
-          <div class="inputContainer">
-            <div class="inputTitle">Họ và tên</div>
-            <input class="input" value="Nguyễn Văn A" />
-          </div>
-          <div class="inputContainer">
-            <div class="inputTitle">Email liên hệ</div>
-            <input
-              class="input"
-              type="email"
-              value="lygiatuan200804@gmail.com"
-            />
-          </div>
-        </div>
-        <div class="inputRow mt-24">
-          <div class="inputContainer">
-            <div class="inputTitle">Mật khẩu</div>
-            <input class="input" type="password" value="Nguyễn Văn A" />
-          </div>
-          <div class="inputContainer">
-            <div class="inputTitle">Số điên thoại</div>
-            <input class="input" type="number" />
-          </div>
-        </div>
-        <div class="inputRow mt-24">
-          <div class="inputContainer">
-            <div class="inputTitle">Ngày sinh</div>
-            <input class="input" type="date" value="Nguyễn Văn A" />
-          </div>
-          <div class="inputContainer">
-            <div class="inputTitle">Giới tính</div>
-            <select class="input">
-              <option value="1">Nam</option>
-              <option value="2">Nữ</option>
-            </select>
-          </div>
-          <div class="inputContainer">
-            <div class="inputTitle">Số CCCD</div>
-            <input class="input" type="number" />
-          </div>
-        </div>
-        <div class="inputRow mt-24">
-          <div class="inputContainer">
-            <div class="inputTitle">Địa chỉ thường trú</div>
-            <input
-              class="input"
-              type="text"
-              placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
-            />
-          </div>
-        </div>
-        <div class="mt-40">
-          <div class="roleTitle">Bạn đăng ký với vai trò:</div>
-          <div class="roleOptionsContainer">
-            <div class="roleOption">
-              <img src="/static/assets/patient_icon.png" />Khách hàng
-            </div>
-            <div class="roleOption">Bác sĩ</div>
-          </div>
-        </div>
-        <div class="mt-64">
-          <div class="roleOption">
-            Đăng ký tài khoản
-            <img src="/static/assets/patient_icon.png" />
-          </div>
-        </div>
-      </form>
-    </div>
-  </body>
-</html>
+{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
+{% block content %}
+<link href="/static/css/login.css" rel="stylesheet" />
+<div class="container">
+  <div class="formContainer">
+    <img src="/static/assets/login_banner.png" class="banner" />
+    <form action="/user/login" method="POST" class="form">
+      <div class="title">Chào mừng trở lại</div>
+      <div class="subtitle">Đăng nhập vào tài khoản của bạn</div>
+      <div class="inputTitle">ĐỊA CHỈ EMAIL</div>
+      <div class="inputContainer">
+        <img src="/static/assets/email_icon.svg" />
+        <input class="input" name="email" type="email" />
+      </div>
+      <div class="inputTitle">MẬT KHẨU</div>
+      <div class="inputContainer">
+        <img src="/static/assets/password_icon.svg" />
+        <input class="input" name="password" type="password" />
+      </div>
+      {% if showError %}
+      <div class="error">Sai tài khoản hoặc mật khẩu</div>
+      {% endif %}
+      <button class="button loginButton">Đăng nhập</button>
+      <div class="divider">
+        <div class="line"></div>
+        <div class="dividerContent">HOẶC</div>
+        <div class="line"></div>
+      </div>
+      <a href="/user/register" class="button registerButton">Đăng ký</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

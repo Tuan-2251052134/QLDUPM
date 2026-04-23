@@ -1,5 +1,5 @@
 from configs.db_config import db
-from main import app
+from __init__ import app
 from flask_login import UserMixin
 from enums.user_role import UserRole
 from enums.user_gender import UserGender
@@ -8,12 +8,15 @@ from enums.appointment_status import AppointmentStatus
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    dob = db.Column(db.Date, nullable=False)
     role = db.Column(db.Enum(UserRole), nullable=False)
     name = db.Column(db.String(30), nullable=False)
     phone = db.Column(db.String(11), nullable=False)
     email = db.Column(db.String(30), nullable=False, unique=True)
     avatar = db.Column(db.String(200))
     gender = db.Column(db.Enum(UserGender), nullable=False)
+    id_card = db.Column(db.String(12), nullable=False,  unique=True)
+    address = db.Column(db.String(50), nullable=False,  unique=True)
     password = db.Column(db.String(255), nullable=False)
 
 

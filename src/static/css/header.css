@@ -1,0 +1,27 @@
+.headerContainer {
+  height: 80px;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 0px 22px;
+}
+
+.navigation {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.navigationItem {
+  line-height: 24px;
+  font-family: sans-serif;
+}
+
+.navigationItemActive {
+  border-bottom: 1px solid #1d4ed8;
+  color: #1d4ed8;
+}
+.homePageButton {
+  margin: 23px 0px;
+  font-family: sans-serif;
+}

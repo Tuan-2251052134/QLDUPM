@@ -56,7 +56,7 @@ def home():
 def get_doctor_profile():
     name = request.args.get('name')
     specialty_id = request.args.get('specialty_id')
-    found_users = user_service.get_doctor(name, specialty_id)
+    found_users = user_service.get_doctors(name, specialty_id)
     print(found_users)
     return render_template('find_doctor.html', foundUsers=found_users)
 

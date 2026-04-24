@@ -60,18 +60,19 @@ def login(request):
     return found_user.role
 
 
-def get_doctor(name, specialty_id, offset=0):
+def get_doctors(name, specialty_id, offset=0):
     query = db.session.query(User.id, User.name, Specialty.name)
     query = query.join(DoctorInfo, DoctorInfo.id == User.id)
     query = query.join(Specialty, Specialty.id == DoctorInfo.specialty_id)
-    query = query.filter(User.role == UserRole.DOCTOR)
-    query = query.limit(limit=10).offset(offset=offset)
 
     if name:
         query = query.filter(User.name.ilike(f"%{name}%"))
 
     if specialty_id:
         query = query.filter(DoctorInfo.specialty_id == specialty_id)
+
+    query = query.filter(User.role == UserRole.DOCTOR)
+    query = query.limit(limit=10).offset(offset=offset)
 
     return query.all()
 
@@ -84,4 +85,3 @@ def get_doctor_detail(id):
     query = query.filter(User.role == UserRole.DOCTOR)
     query = query.filter(User.id == id)
     return query.all()
-    

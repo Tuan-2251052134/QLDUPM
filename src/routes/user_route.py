@@ -46,9 +46,19 @@ def login():
         return render_template('login.html', showError=True)
 
 
+@blueprint.route('/user/home', methods=['GET'])
+def home():
+    specialties = specialty_service.get_specialties()
+    return render_template('home.html', specialties=specialties)
+
+
+@blueprint.route("/user/find-doctor", methods=['GET'])
+def get_doctor_profile():
+    return render_template('find_doctor.html')
+
+
 @blueprint.route('/user/doctor/profile', methods=['GET'])
 def get_doctor_page():
     if current_user and current_user.role != UserRole.DOCTOR:
         redirect('/user/home')
     return render_template('doctor/profile.html')
-

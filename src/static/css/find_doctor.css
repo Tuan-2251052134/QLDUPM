@@ -1,0 +1,37 @@
+.container {
+  padding: 32px;
+  background-color: #f8f9fa;
+}
+
+.cardsContainer {
+  display: flex;
+}
+
+.card {
+  background-color: white;
+  border-radius: 40px;
+  height: 304px;
+  width: 420px;
+  display: flex;
+  padding: 25px;
+  gap: 24px;
+}
+
+.cardImage {
+  height: 224px;
+  width: 192px;
+  border-radius: 24px;
+}
+
+.name {
+  font-size: 24px;
+  color: #191c1d;
+}
+
+.detailButton {
+  background-color: #e7e8e9;
+  width: 120px;
+  height: 48px;
+  border-radius: 16px;
+  border-width: 0px;
+}

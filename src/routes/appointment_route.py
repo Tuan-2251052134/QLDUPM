@@ -12,14 +12,21 @@ blueprint = Blueprint('appointment', __name__)
 
 @blueprint.route('/user/doctor/appointment', methods=['GET', 'POST'])
 def get_appointment_page():
-    if not current_user or current_user.role != UserRole.DOCTOR:
-        redirect('/home')
+    if (not current_user.is_authenticated) or current_user.role != UserRole.DOCTOR:
+        return redirect('/user/home')
 
+    today = datetime.today()
+    start_of_week = today - timedelta(days=today.weekday())
+
+    days_of_week = [
+        (start_of_week + timedelta(days=i)).strftime("%d/%m/%Y")
+        for i in range(7)
+    ]
+    
     if request.method == 'POST':
         appointments = []
         datetimes = request.form.getlist('datetimes')
-        print(datetimes)
-        
+
         for _datetime in datetimes:
             date, appointment_time_id = _datetime.split("-")
             appointment = Appointment(
@@ -32,20 +39,16 @@ def get_appointment_page():
 
         try:
             Appointment.query.filter(
-                Appointment.doctor_id == current_user.id).delete()
+                Appointment.doctor_id == current_user.id,
+                Appointment.date >= datetime.strptime(
+                    days_of_week[0], "%d/%m/%Y").date(),
+                Appointment.date <= datetime.strptime(
+                    days_of_week[6], "%d/%m/%Y").date()).delete()
             db.session.add_all(appointments)
             db.session.commit()
         except Exception as ex:
             print(ex)
             db.session.rollback()
-
-    today = datetime.today()
-    start_of_week = today - timedelta(days=today.weekday())
-
-    days_of_week = [
-        (start_of_week + timedelta(days=i)).strftime("%d/%m/%Y")
-        for i in range(7)
-    ]
 
     registered_appointments = db.session.query(Appointment, AppointmentTime).filter(
         Appointment.doctor_id == current_user.id,

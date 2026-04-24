@@ -1,7 +1,7 @@
 <link href="/static/css/header.css" rel="stylesheet" />
 <div class="headerContainer">
   <div class="navigation">
-    {% if current_user.role and current_user.role.value == "DOCTOR" %}
+    {% if current_user.is_authenticated and current_user.role.value == "DOCTOR" %}
     <a
       href="/user/doctor/appointment"
       class="navigationItem {% if request.path == '/user/doctor/appointment' %} navigationItemActive {% endif %}"

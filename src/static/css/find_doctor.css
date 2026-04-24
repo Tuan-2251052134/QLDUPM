@@ -5,6 +5,8 @@
 
 .cardsContainer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
 }
 
 .card {
@@ -15,6 +17,7 @@
   display: flex;
   padding: 25px;
   gap: 24px;
+  box-sizing: border-box;
 }
 
 .cardImage {
@@ -26,6 +29,7 @@
 .name {
   font-size: 24px;
   color: #191c1d;
+  margin-bottom: 20px;
 }
 
 .detailButton {
@@ -34,4 +38,23 @@
   height: 48px;
   border-radius: 16px;
   border-width: 0px;
+  text-decoration: none;
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  color: #191c1d;
+}
+
+.specialty {
+  width: 89px;
+  height: 25px;
+  background-color: #edeeef;
+  color: #191c1d;
+  font-size: 11px;
+  border-radius: 25px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
 }

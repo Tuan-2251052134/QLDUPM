@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
+{% block content %}
+<link href="/static/css/detail_doctor.css" rel="stylesheet" />
+<div class="pageContainer">
+  <div class="infoCard">
+    <img class="image" src="/static/assets/banner.png" />
+    <div>
+      <div class="title">{{user[0][0].name}}</div>
+      <div class="specitalty">{{user[0][1]}}</div>
+    </div>
+  </div>
+  <div class="infoContainer">
+    <div class="infoForm">
+      <div class="personalTitleContainer">
+        <image src="/static/assets/personal_info.svg" class="icon" />
+        <div class="personalTitle">Thông tin liên hệ</div>
+      </div>
+      <div>
+        <div class="inputTitle">EMAIL CÁ NHÂN</div>
+        <div class="input">{{user[0][0].email}}</div>
+      </div>
+       <div>
+        <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
+        <div class="input">{{user[0][0].phone}}</div>
+      </div>
+       <div>
+        <div class="inputTitle">SỐ CCCD</div>
+        <div class="input">{{user[0][0].id_card}}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

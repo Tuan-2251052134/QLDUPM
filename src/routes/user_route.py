@@ -54,7 +54,17 @@ def home():
 
 @blueprint.route("/user/find-doctor", methods=['GET'])
 def get_doctor_profile():
-    return render_template('find_doctor.html')
+    name = request.args.get('name')
+    specialty_id = request.args.get('specialty_id')
+    found_users = user_service.get_doctor(name, specialty_id)
+    print(found_users)
+    return render_template('find_doctor.html', foundUsers=found_users)
+
+
+@blueprint.route("/user/find-doctor/<id>", methods=['GET'])
+def get_doctor_detail_profile(id):
+    user = user_service.get_doctor_detail(id)
+    return render_template('/detail_doctor.html', user=user)
 
 
 @blueprint.route('/user/doctor/profile', methods=['GET'])

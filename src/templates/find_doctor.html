@@ -3,13 +3,16 @@
 <link href="/static/css/find_doctor.css" rel="stylesheet" />
 <div class="container">
   <div class="cardsContainer">
+    {% for user in foundUsers %}
     <div class="card">
       <img class="cardImage" src="/static/assets/banner.png" />
       <div>
-        <div class="name">Lý Gia Tuấn</div>
-        <button class="detailButton">Chi tiết -></button>
+        <div class="name">{{user[1]}}</div>
+        <div class="specialty">{{user[2]}}</div>
+        <a href="/user/find-doctor/{{user[0]}}" class="detailButton">Chi tiết</a>
       </div>
     </div>
+    {% endfor%}
   </div>
 </div>
 {% endblock %}

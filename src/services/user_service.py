@@ -1,6 +1,6 @@
 from models import User
 from utils import password_util
-from models import User, DoctorInfo
+from models import User, DoctorInfo, Specialty, Certication
 from flask_login import login_user
 from exceptions.login_exception import LoginException
 from utils import password_util
@@ -58,3 +58,30 @@ def login(request):
     login_user(found_user)
 
     return found_user.role
+
+
+def get_doctor(name, specialty_id, offset=0):
+    query = db.session.query(User.id, User.name, Specialty.name)
+    query = query.join(DoctorInfo, DoctorInfo.id == User.id)
+    query = query.join(Specialty, Specialty.id == DoctorInfo.specialty_id)
+    query = query.filter(User.role == UserRole.DOCTOR)
+    query = query.limit(limit=10).offset(offset=offset)
+
+    if name:
+        query = query.filter(User.name.ilike(f"%{name}%"))
+
+    if specialty_id:
+        query = query.filter(DoctorInfo.specialty_id == specialty_id)
+
+    return query.all()
+
+
+def get_doctor_detail(id):
+    query = db.session.query(User, Specialty.name, Certication.url)
+    query = query.join(DoctorInfo, DoctorInfo.id == User.id)
+    query = query.join(Specialty, Specialty.id == DoctorInfo.specialty_id)
+    query = query.outerjoin(Certication, Certication.user_id == User.id)
+    query = query.filter(User.role == UserRole.DOCTOR)
+    query = query.filter(User.id == id)
+    return query.all()
+    

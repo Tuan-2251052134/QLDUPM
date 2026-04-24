@@ -1,7 +1,8 @@
 from __init__ import app
-from routes import user_route
+from routes import user_route, appointment_route
 
 app.register_blueprint(user_route.blueprint)
+app.register_blueprint(appointment_route.blueprint)
 
 if __name__ == '__main__':
     app.run(debug=True)

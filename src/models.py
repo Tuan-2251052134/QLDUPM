@@ -1,9 +1,11 @@
 from configs.db_config import db
+from sqlalchemy import UniqueConstraint
 from __init__ import app
 from flask_login import UserMixin
 from enums.user_role import UserRole
 from enums.user_gender import UserGender
 from enums.appointment_status import AppointmentStatus
+from datetime import time
 
 
 class User(db.Model, UserMixin):
@@ -22,10 +24,10 @@ class User(db.Model, UserMixin):
 
 class DoctorInfo(db.Model):
     id = db.Column(db.Integer,
-                   db.ForeignKey("appointment_time.id"),
+                   db.ForeignKey("user.id"),
                    primary_key=True,
                    autoincrement=True)
-    specialty = db.Column(
+    specialty_id = db.Column(
         db.Integer,
         db.ForeignKey("specialty.id"),
         nullable=False)
@@ -49,7 +51,6 @@ class AppointmentTime(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    url = db.Column(db.String(255), nullable=False)
     appointment_time_id = db.Column(
         db.Integer,
         db.ForeignKey("appointment_time.id"),
@@ -62,10 +63,14 @@ class Appointment(db.Model):
         nullable=False)
     patient_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id"),  # 👈 FK ở đây
-        nullable=False)
-    symptom = db.Column(db.String(20), nullable=False)
+        db.ForeignKey("user.id"))
+    symptom = db.Column(db.String(20))
     status = db.Column(db.Enum(AppointmentStatus), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('date', 'appointment_time_id',
+                         name='unique_date_appointment_time_id'),
+    )
 
 
 class Symptom(db.Model):
@@ -83,3 +88,17 @@ class Specialty(db.Model):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        times = [
+            AppointmentTime(start_time=time(7, 0), end_time=time(8, 0)),
+            AppointmentTime(start_time=time(8, 0), end_time=time(9, 0)),
+            AppointmentTime(start_time=time(9, 0), end_time=time(10, 0)),
+            AppointmentTime(start_time=time(10, 0), end_time=time(11, 0)),
+            AppointmentTime(start_time=time(11, 0), end_time=time(12, 0)),
+            AppointmentTime(start_time=time(12, 0), end_time=time(13, 0)),
+            AppointmentTime(start_time=time(13, 0), end_time=time(14, 0)),
+            AppointmentTime(start_time=time(14, 0), end_time=time(15, 0)),
+            AppointmentTime(start_time=time(15, 0), end_time=time(16, 0)),
+            AppointmentTime(start_time=time(17, 0), end_time=time(18, 0)),
+        ]
+        db.session.add_all(times)
+        db.session.commit()

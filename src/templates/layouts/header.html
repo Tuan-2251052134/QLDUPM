@@ -1,8 +1,18 @@
 <link href="/static/css/header.css" rel="stylesheet" />
 <div class="headerContainer">
   <div class="navigation">
-    <div class="navigationItem">Tìm bác sĩ</div>
-    <div class="navigationItem navigationItemActive">Tìm bác sĩ</div>
+    {% if current_user.role and current_user.role.value == "DOCTOR" %}
+    <a
+      href="/user/doctor/appointment"
+      class="navigationItem {% if request.path == '/user/doctor/appointment' %} navigationItemActive {% endif %}"
+      >Cuộc hẹn</a
+    >
+    <a
+      href="/user/doctor/profile"
+      class="navigationItem {% if request.path == '/user/doctor/profile' %} navigationItemActive {% endif %}"
+      >Hồ sơ</a
+    >
+    {% endif %}
   </div>
-  <div class="homePageButton navigationItemActive">Về trang chủ</div>
+  <div class="homePageButton navigationItemActive">Đăng xuất</div>
 </div>

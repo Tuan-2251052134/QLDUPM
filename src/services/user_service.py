@@ -1,10 +1,11 @@
 from models import User
 from utils import password_util
-from models import User
-from repositories import user_repository
+from models import User, DoctorInfo
 from flask_login import login_user
 from exceptions.login_exception import LoginException
 from utils import password_util
+from configs.db_config import db
+from enums.user_role import UserRole
 
 
 def create_user(request):
@@ -30,7 +31,18 @@ def create_user(request):
         id_card=id_card,
         address=address,
         password=hash_password)
-    user_repository.create_user(user=user)
+    specialty_id = request.form.get('specialty_id')
+    try:
+        db.session.add(user)
+        db.session.flush()
+        if user.role == UserRole.DOCTOR.value:
+            doctorInfo = DoctorInfo(
+                id=user.id, specialty_id=specialty_id)
+            db.session.add(doctorInfo)
+        db.session.commit()
+    except Exception as ex:
+        print(ex)
+        db.session.rollback()
 
 
 def login(request):

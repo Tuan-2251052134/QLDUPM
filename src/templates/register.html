@@ -19,27 +19,17 @@
         <div class="inputRow mt-40">
           <div class="inputContainer">
             <div class="inputTitle">Họ và tên</div>
-            <input class="input" name="name" value="Nguyễn Văn A" />
+            <input class="input" name="name" />
           </div>
           <div class="inputContainer">
             <div class="inputTitle">Email liên hệ</div>
-            <input
-              class="input"
-              name="email"
-              type="email"
-              value="lygiatuan200804@gmail.com"
-            />
+            <input class="input" name="email" type="email" />
           </div>
         </div>
         <div class="inputRow mt-24">
           <div class="inputContainer">
             <div class="inputTitle">Mật khẩu</div>
-            <input
-              class="input"
-              type="password"
-              name="password"
-              value="lkjhg09876"
-            />
+            <input class="input" type="password" name="password" />
           </div>
           <div class="inputContainer">
             <div class="inputTitle">Số điên thoại</div>
@@ -49,7 +39,7 @@
         <div class="inputRow mt-24">
           <div class="inputContainer">
             <div class="inputTitle">Ngày sinh</div>
-            <input class="input" type="date" name="dob" value="Nguyễn Văn A" />
+            <input class="input" type="date" name="dob" />
           </div>
           <div class="inputContainer">
             <div class="inputTitle">Giới tính</div>
@@ -85,6 +75,17 @@
               <img src="/static/assets/patient_icon.png" />
               Bác sĩ
             </div>
+          </div>
+        </div>
+        <div class="mt-40 doctorInfoContainer" id="doctorInfoContainer">
+          <div class="inputTitle">Chuyên ngành</div>
+          <div class="inputContainer">
+            <div class="inputTitle"></div>
+            <select class="input" name="specialty_id">
+              {% for specialty in specialties %}
+              <option value="{{ specialty.id }}">{{ specialty.name }}</option>
+              {% endfor %}
+            </select>
           </div>
         </div>
         <div class="mt-64">

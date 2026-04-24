@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
 from flask_login import current_user
-from services import user_service
+from services import user_service, specialty_service
 from models import User
 from configs.security_config import login_manager
 from exceptions.login_exception import LoginException
@@ -22,7 +22,8 @@ def register():
         if request.method == "POST":
             user_service.create_user(request=request)
             return redirect('/user/login')
-        return render_template('register.html')
+        specialties = specialty_service.get_specialties()
+        return render_template('register.html', specialties=specialties)
     except Exception:
         return render_template('register.html')
 
@@ -31,11 +32,11 @@ def register():
 def login():
     try:
         if request.method == "GET":
-            return redirect('/home')
+            return render_template('login.html')
 
         role = user_service.login(request=request)
         if role == UserRole.DOCTOR:
-            return redirect('/user/doctor')
+            return redirect('/user/doctor/profile')
 
         return redirect('home')
 
@@ -45,8 +46,9 @@ def login():
         return render_template('login.html', showError=True)
 
 
-@blueprint.route('/user/doctor', methods=['GET'])
+@blueprint.route('/user/doctor/profile', methods=['GET'])
 def get_doctor_page():
     if current_user and current_user.role != UserRole.DOCTOR:
         redirect('/user/home')
-    return render_template('doctor_page.html')
+    return render_template('doctor/profile.html')
+

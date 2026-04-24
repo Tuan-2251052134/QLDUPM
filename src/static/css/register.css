@@ -72,6 +72,7 @@ body {
   border-radius: 8px;
   color: #414753;
   gap: 12px;
+  border-width: 0px;
 }
 
 .active {
@@ -96,5 +97,9 @@ body {
 }
 
 .roleInput {
+  display: none;
+}
+
+.doctorInfoContainer {
   display: none;
 }

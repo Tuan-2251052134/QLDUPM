@@ -1,19 +1,35 @@
-{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
-{% block content %}
+{% extends "doctor/layouts/base.html" %} {% block title %}Trang đăng nhập{%
+endblock %} {% block main %}
 <script src="/static/js/doctor/appointments.js"></script>
 <link href="/static/css/doctor/appointments.css" rel="stylesheet" />
+
 <form class="container" action="/user/doctor/appointment" method="post">
+  <div class="mainTitle">Lịch hàng tuần</div>
+  <div class="stateContainer">
+    <div class="stateOption">
+      <div class="color avalableColor"></div>
+      <div class="stateValue">TRỐNG</div>
+    </div>
+     <div class="stateOption">
+      <div class="color selectedColor"></div>
+      <div class="stateValue">ĐÃ CHỌN</div>
+    </div>
+     <div class="stateOption">
+      <div class="color bookedColor"></div>
+      <div class="stateValue">ĐÃ ĐẶT</div>
+    </div>
+  </div>
   <div class="tableContainer">
     <table class="table">
       <tbody>
         <tr class="header">
           {% for index in range(7) %}
           <th
-            class="{% if index == 0 %} firstColumn {% endif %} {% if index != 5 %} rightBorder {% endif %} bottomBorder"
+            class="{% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} bottomBorder"
           >
             <div>
               {% if index != 0 %}
-              <div class="date">{{ daysOfWeek[index] }}</div>
+              <div class="date">{{ daysOfWeek[index-1] }}</div>
               <div class="time">Thứ {{index}}</div>
               {% endif %}
             </div>
@@ -28,7 +44,7 @@
         <tr>
           {% for index in range(7) %}
           <td
-            class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 5 %} rightBorder {% endif %} {% if hour != 8 %} bottomBorder {% endif %}"
+            class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} {% if hour != 10 %} bottomBorder {% endif %}"
           >
             {% if index == 0 %} {{ hour + 6 }}:00 - {{hour + 7}}:00 {% else %}
             <div
@@ -36,7 +52,12 @@
               id="cell-{{ hour.__str__() }}-{{index.__str__() }}"
               onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')"
             >
-              <p class="title {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}" id="title">Đã chọn</p>
+              <p
+                class="title {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}"
+                id="title"
+              >
+                Đã chọn
+              </p>
               <input
                 class="cellCheckbox"
                 id="cellCheckbox"
@@ -54,6 +75,8 @@
       </tbody>
     </table>
   </div>
-  <button class="confirmButton" type="submit">Xác nhận</button>
+  <div class="buttonContainer">
+    <button class="confirmButton" type="submit">Xác nhận</button>
+  </div>
 </form>
 {% endblock %}

@@ -1,12 +1,8 @@
-.container {
-  padding: 27px 64px;
-  text-align: center;
-}
-
 .tableContainer {
   border: 1px solid #e7e8e9;
   border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 12px 40px rgba(25, 28, 29, 0.06);
 }
 
 .table {
@@ -22,6 +18,7 @@
 .table th,
 td {
   height: 88px;
+  box-sizing: border-box;
 }
 
 .rightBorder {
@@ -63,7 +60,9 @@ td {
 
 .cellActive {
   background-color: #004e9f;
-  box-shadow: black;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px #004e9f;
 }
 
 .date {
@@ -89,13 +88,62 @@ td {
 }
 
 .confirmButton {
-  background-color: #004e9f;
+  background: linear-gradient(to right, #004e9f, #0066cc);
   width: 614px;
   border-radius: 16px;
   height: 68px;
   border: 0px;
   color: white;
-  margin-top: 40px;
   cursor: pointer;
   font-size: 20px;
+  border: 1px solid #000000;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  margin: 40px auto;
+}
+
+.mainTitle {
+  color: #191c1d;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 40px;
+}
+
+.buttonContainer {
+  text-align: center;
+}
+
+.stateContainer {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  margin: 32px 0px;
+  gap: 32px;
+}
+.stateOption {
+  display: flex;
+  gap: 10px;
+}
+
+.stateValue {
+  color: #414753;
+  font-size: 12px;
+  list-style: 16px;
+}
+
+.color {
+  border-radius: 100%;
+  width: 14px;
+  height: 14px;
+}
+
+.avalableColor {
+  background-color: #e1e3e4;
+}
+
+.selectedColor {
+  background-color: #004e9f;
+}
+
+.bookedColor {
+  background-color: green;
 }

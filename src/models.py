@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.String(200))
     gender = db.Column(db.Enum(UserGender), nullable=False)
     id_card = db.Column(db.String(12), nullable=False,  unique=True)
-    address = db.Column(db.String(50), nullable=False,  unique=True)
+    address = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
 
@@ -68,8 +68,8 @@ class Appointment(db.Model):
     status = db.Column(db.Enum(AppointmentStatus), nullable=False)
 
     __table_args__ = (
-        UniqueConstraint('date', 'appointment_time_id',
-                         name='unique_date_appointment_time_id'),
+        UniqueConstraint('date', 'appointment_time_id', 'doctor_id', 'patient_id',
+                         name='unique_date_appointment_time_id_doctor_id_patient_id'),
     )
 
 

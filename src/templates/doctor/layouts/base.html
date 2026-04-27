@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
+{% block content %}
+<link href="/static/css/doctor/layouts/base.css" rel="stylesheet" />
+<div class="doctorBasePageContainer">
+  <div class="doctorBaseSideNavigation">
+    <a
+      href="/user/doctor/profile"
+      class="doctorBaseSideNavigationItem {% if request.path == '/user/doctor/profile' %} doctorBaseSideNavigationItemActive {% endif %}"
+    >
+      <img
+        src="/static/assets/users/user{% if request.path == '/user/doctor/profile' %}_active{% endif %}.svg"
+        class="doctorBaseImage"
+      />
+      <div
+        class="doctorBaseItemTitle {% if request.path == '/user/doctor/profile' %} doctorBaseItemTitleActive {% endif %}"
+      >
+        Hồ sơ
+      </div>
+    </a>
+    <a
+      href="/user/doctor/appointment"
+      class="doctorBaseSideNavigationItem {% if request.path == '/user/doctor/appointment' %} doctorBaseSideNavigationItemActive {% endif %}"
+    >
+      <img
+        src="/static/assets/calenders/calender{% if request.path == '/user/doctor/appointment' %}_active{% endif %}.svg"
+        class="doctorBaseImage"
+      />
+      <div
+        class="doctorBaseItemTitle {% if request.path == '/user/doctor/appointment' %} doctorBaseItemTitleActive {% endif %}"
+      >
+        Lịch làm
+      </div>
+    </a>
+  </div>
+  {% block main %}{% endblock %}
+</div>
+{% endblock %}

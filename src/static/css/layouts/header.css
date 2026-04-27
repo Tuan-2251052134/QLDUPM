@@ -14,7 +14,6 @@
 
 .navigationItem {
   line-height: 24px;
-  font-family: sans-serif;
   color: black;
   text-decoration: none;
 }
@@ -24,5 +23,24 @@
 }
 .homePageButton {
   margin: 23px 0px;
+  font-family: sans-serif;
+}
+
+.home {
+  color: #1e40af;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  text-decoration: none;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+body {
+  margin: 0px;
   font-family: sans-serif;
 }

@@ -1,9 +1,44 @@
-{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
-{% block content %}
-<link href="/static/css/doctor/profile.css" rel="stylesheet"/>
-<div class="pageContainer">
-    <div class="infoCard">
-        <img class="image" src="/static/assets/banner.png"/>
+{% extends "doctor/layouts/base.html" %} {% block title %}Trang đăng nhập{%
+endblock %} {% block main %}
+<div class="container">
+  <link href="/static/css/doctor/profile.css" rel="stylesheet" />
+  <div class="infoCard">
+    <div class="imageContainer">
+      <img class="image" src="/static/assets/banner.png" />
     </div>
+    <div>
+      <div class="title">BÁC SĨ CHUYÊN KHOA II</div>
+      <div class="name">Nguyễn Hữu An</div>
+      <div class="speciltyContainer">
+        <div class="specialty">Tim mạch học</div>
+      </div>
+      <div class="archieveTitle">BỆNH NHÂN</div>
+      <div class="archieveValue">2,400+</div>
+    </div>
+  </div>
+  <div class="infoContainer">
+    <div class="infoForm">
+      <div class="personalTitleContainer">
+        <image src="/static/assets/personal_info.svg" class="icon" />
+        <div class="personalTitle">Thông tin liên hệ</div>
+      </div>
+      <div>
+        <div class="inputTitle">EMAIL CÁ NHÂN</div>
+        <div class="input">e</div>
+      </div>
+      <div>
+        <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
+        <div class="input">p</div>
+      </div>
+      <div>
+        <div class="inputTitle">SỐ CCCD</div>
+        <div class="input">go</div>
+      </div>
+         <div>
+        <div class="inputTitle">ĐỊA CHỈ</div>
+        <div class="input">go</div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

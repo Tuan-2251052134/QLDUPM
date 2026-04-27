@@ -3,9 +3,10 @@ from flask_login import current_user
 from services import user_service, specialty_service
 from models import User
 from configs.security_config import login_manager
-from exceptions.login_exception import LoginException
+from exceptions import LoginException
 from argon2.exceptions import InvalidHashError
 from enums.user_role import UserRole
+from filters.auth_filter import is_doctor
 
 
 blueprint = Blueprint('user', __name__)
@@ -68,7 +69,6 @@ def get_doctor_detail_profile(id):
 
 
 @blueprint.route('/user/doctor/profile', methods=['GET'])
+@is_doctor
 def get_doctor_page():
-    if current_user and current_user.role != UserRole.DOCTOR:
-        redirect('/user/home')
     return render_template('doctor/profile.html')

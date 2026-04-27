@@ -71,7 +71,10 @@
 
 .loginButton {
   color: #ffffff;
-  background-color: #004e9f;
+  background: linear-gradient(to right, #004e9f, #0066cc);
+  box-shadow:
+    0px 10px 15px -3px rgb(0, 78, 159, 0.2),
+    0px 4px 6px -3px rgb(0, 78, 159, 0.2);
 }
 
 .registerButton {

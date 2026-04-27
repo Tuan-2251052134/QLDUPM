@@ -1,0 +1,48 @@
+.doctorBasePageContainer {
+  display: flex;
+  background-color: #f8fafc;
+  gap: 48px;
+  padding-top: 16px;
+  padding-right: 48px;
+}
+
+.doctorBaseSideNavigation {
+  padding: 0px 10px;
+  margin-top: 100px;
+}
+
+.doctorBaseSideNavigationItem {
+  display: flex;
+  align-items: center;
+  padding: 0px 17px;
+  color: #475569;
+  cursor: pointer;
+  gap: 17px;
+  height: 50px;
+  width: 269px;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.doctorBaseSideNavigationItemActive {
+  background-color: #ffffff;
+  color: #1d4ed8;
+  font-size: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.doctorBaseImage {
+  width: 17px;
+  height: 17px;
+}
+
+.doctorBaseItemTitle {
+  color: #475569;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.doctorBaseItemTitleActive {
+  color: #1d4ed8;
+}

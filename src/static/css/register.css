@@ -3,14 +3,10 @@
   height: 100%;
 }
 
-body {
-  margin: 0;
-  font-family: "Manrope", sans-serif;
-}
-
 .form {
   padding: 68px 80px;
   flex: 1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .title {
@@ -102,4 +98,9 @@ body {
 
 .doctorInfoContainer {
   display: none;
+}
+
+body {
+  margin: 0px;
+  font-family: sans-serif;
 }

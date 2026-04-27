@@ -2,7 +2,7 @@ from models import User
 from utils import password_util
 from models import User, DoctorInfo, Specialty, Certication
 from flask_login import login_user
-from exceptions.login_exception import LoginException
+from exceptions import LoginException
 from utils import password_util
 from configs.db_config import db
 from enums.user_role import UserRole

@@ -1,18 +1,7 @@
-<link href="/static/css/header.css" rel="stylesheet" />
+<link href="/static/css/layouts/header.css" rel="stylesheet" />
 <div class="headerContainer">
+  <a href="/user/home" class="home">Aura Medical </a>
   <div class="navigation">
-    {% if current_user.is_authenticated and current_user.role.value == "DOCTOR" %}
-    <a
-      href="/user/doctor/appointment"
-      class="navigationItem {% if request.path == '/user/doctor/appointment' %} navigationItemActive {% endif %}"
-      >Cuộc hẹn</a
-    >
-    <a
-      href="/user/doctor/profile"
-      class="navigationItem {% if request.path == '/user/doctor/profile' %} navigationItemActive {% endif %}"
-      >Hồ sơ</a
-    >
-    {% endif %}
   </div>
-  <div class="homePageButton navigationItemActive">Đăng xuất</div>
+  <img src="/static/assets/banner.png" class="avatar"/>
 </div>

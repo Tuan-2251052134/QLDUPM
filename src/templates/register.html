@@ -10,7 +10,13 @@
   <body>
     <div class="container">
       <img class="image" src="/static/assets/banner.png" />
-      <form method="POST" action="/user/register" class="form" id="form">
+      <form
+        method="POST"
+        action="/user/register"
+        class="form"
+        id="form"
+        enctype="multipart/form-data"
+      >
         <div class="title">Tạo tài khoản mới</div>
         <div class="subtitle">
           Vui lòng điền các thông tin dưới đây để bắt đầu hành trình sức khỏe
@@ -86,6 +92,31 @@
               <option value="{{ specialty.id }}">{{ specialty.name }}</option>
               {% endfor %}
             </select>
+          </div>
+        </div>
+        <div class="mt-40 certifcateCard" id="certifcateCard">
+          <img src="/static/assets/certificate.svg" class="certifcateIcon" />
+          <div class="certificateContainer">
+            <div class="certifcateTitle">Chứng nhận hành nghề Y</div>
+            <div
+              class="certificateInputContainer"
+              id="certificateInputContainer"
+            >
+              <input
+                type="file"
+                hidden
+                id="certificateInput"
+                name="certification"
+              />
+              <img src="/static/assets/picture.svg" />
+              <div class="certificateInputTitle">Tải hình ảnh lên</div>
+            </div>
+            <input
+              name="certificationName"
+              class="input"
+              type="text"
+              placeholder="Tên chứng chỉ"
+            />
           </div>
         </div>
         <div class="mt-64">

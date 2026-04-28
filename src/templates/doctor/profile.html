@@ -4,13 +4,13 @@ endblock %} {% block main %}
   <link href="/static/css/doctor/profile.css" rel="stylesheet" />
   <div class="infoCard">
     <div class="imageContainer">
-      <img class="image" src="/static/assets/banner.png" />
+      <img class="image" src="{{user.avatar}}" />
     </div>
     <div>
-      <div class="title">BÁC SĨ CHUYÊN KHOA II</div>
-      <div class="name">Nguyễn Hữu An</div>
+      <div class="title">BÁC SĨ CHUYÊN KHOA</div>
+      <div class="name">{{user.name}}</div>
       <div class="speciltyContainer">
-        <div class="specialty">Tim mạch học</div>
+        <div class="specialty">{{user.doctor_info.specialty.name}}</div>
       </div>
       <div class="archieveTitle">BỆNH NHÂN</div>
       <div class="archieveValue">2,400+</div>
@@ -24,20 +24,33 @@ endblock %} {% block main %}
       </div>
       <div>
         <div class="inputTitle">EMAIL CÁ NHÂN</div>
-        <div class="input">e</div>
+        <div class="input">{{user.email}}</div>
       </div>
       <div>
         <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
-        <div class="input">p</div>
+        <div class="input">{{user.phone}}</div>
       </div>
       <div>
         <div class="inputTitle">SỐ CCCD</div>
-        <div class="input">go</div>
+        <div class="input">{{user.id_card}}</div>
       </div>
-         <div>
+      <div>
         <div class="inputTitle">ĐỊA CHỈ</div>
-        <div class="input">go</div>
+        <div class="input">{{user.address}}</div>
       </div>
+    </div>
+    <div class="infoForm">
+      <div class="personalTitleContainer">
+        <img src="/static/assets/cert_icon.svg" class="icon" />
+        <div class="personalTitle">Chứng chỉ chuyên môn</div>
+      </div>
+
+      {% for cert in user.doctor_info.certifications%}
+      <div>
+        <div class="inputTitle">{{cert.name}}</div>
+        <img src="{{cert.url}}" class="certImage" />
+      </div>
+      {% endfor %}
     </div>
   </div>
 </div>

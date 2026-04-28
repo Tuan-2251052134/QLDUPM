@@ -1,11 +1,13 @@
 from models import User
 from utils import password_util
-from models import User, DoctorInfo, Specialty, Certication
+from models import User, DoctorInfo, Specialty, Certification
 from flask_login import login_user
-from exceptions import LoginException
+from exceptions import LoginException, CloudinaryException
 from utils import password_util
 from configs.db_config import db
 from enums.user_role import UserRole
+from cloudinary import uploader
+from sqlalchemy.orm import joinedload
 
 
 def create_user(request):
@@ -19,6 +21,7 @@ def create_user(request):
     id_card = request.form.get('id_card')
     address = request.form.get('address')
     password = request.form.get('password')
+    certification_name = request.form.get("certificationName")
     hash_password = password_util.hash(password)
     user = User(
         dob=dob,
@@ -31,7 +34,16 @@ def create_user(request):
         id_card=id_card,
         address=address,
         password=hash_password)
-    specialty_id = request.form.get('specialty_id')
+
+    if user.role == UserRole.DOCTOR.value:
+        try:
+            specialty_id = request.form.get('specialty_id')
+            certificationFile = request.files.get('certification')
+            result = uploader.upload(certificationFile)
+            url = result.get('secure_url')
+        except Exception as ex:
+            raise CloudinaryException()
+
     try:
         db.session.add(user)
         db.session.flush()
@@ -39,6 +51,9 @@ def create_user(request):
             doctorInfo = DoctorInfo(
                 id=user.id, specialty_id=specialty_id)
             db.session.add(doctorInfo)
+            certification = Certification(
+                url=url, doctor_info_id=user.id, name=certification_name)
+            db.session.add(certification)
         db.session.commit()
     except Exception as ex:
         print(ex)
@@ -78,10 +93,8 @@ def get_doctors(name, specialty_id, offset=0):
 
 
 def get_doctor_detail(id):
-    query = db.session.query(User, Specialty.name, Certication.url)
-    query = query.join(DoctorInfo, DoctorInfo.id == User.id)
-    query = query.join(Specialty, Specialty.id == DoctorInfo.specialty_id)
-    query = query.outerjoin(Certication, Certication.user_id == User.id)
-    query = query.filter(User.role == UserRole.DOCTOR)
-    query = query.filter(User.id == id)
-    return query.all()
+    query = User.query.filter_by(id=id).options(
+        joinedload(User.doctor_info).joinedload(DoctorInfo.certifications),
+        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
+    )
+    return query.first()

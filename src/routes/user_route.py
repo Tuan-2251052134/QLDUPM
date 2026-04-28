@@ -3,7 +3,7 @@ from flask_login import current_user
 from services import user_service, specialty_service
 from models import User
 from configs.security_config import login_manager
-from exceptions import LoginException
+from exceptions import LoginException, CloudinaryException
 from argon2.exceptions import InvalidHashError
 from enums.user_role import UserRole
 from filters.auth_filter import is_doctor
@@ -25,6 +25,9 @@ def register():
             return redirect('/user/login')
         specialties = specialty_service.get_specialties()
         return render_template('register.html', specialties=specialties)
+    except CloudinaryException:
+        error = "Có lỗi với cloudinary"
+        return render_template('register.html', error=error)
     except Exception:
         return render_template('register.html')
 
@@ -71,4 +74,6 @@ def get_doctor_detail_profile(id):
 @blueprint.route('/user/doctor/profile', methods=['GET'])
 @is_doctor
 def get_doctor_page():
-    return render_template('doctor/profile.html')
+    user = user_service.get_doctor_detail(current_user.id)
+    print(user.doctor_info.certifications)
+    return render_template('doctor/profile.html', user=user)

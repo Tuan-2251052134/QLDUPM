@@ -21,24 +21,35 @@ class User(db.Model, UserMixin):
     address = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
+    doctor_info = db.relationship(
+        "DoctorInfo",
+        uselist=False,
+        lazy="select"
+    )
+
 
 class DoctorInfo(db.Model):
     id = db.Column(db.Integer,
                    db.ForeignKey("user.id"),
-                   primary_key=True,
-                   autoincrement=True)
+                   primary_key=True)
     specialty_id = db.Column(
         db.Integer,
         db.ForeignKey("specialty.id"),
         nullable=False)
+    certifications = db.relationship(
+        "Certification",
+        lazy="select"
+    )
+    specialty = db.relationship("Specialty")
 
 
-class Certication(db.Model):
+class Certification(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     url = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(
+    name = db.Column(db.String(100), nullable=False)
+    doctor_info_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id"),  # 👈 FK ở đây
+        db.ForeignKey("doctor_info.id"),  # 👈 FK ở đây
         nullable=False
     )
 
@@ -87,7 +98,35 @@ class Specialty(db.Model):
 
 if __name__ == '__main__':
     with app.app_context():
+        db.drop_all()
         db.create_all()
+        data = [
+            "Nội tổng quát",
+            "Tim mạch",
+            "Hô hấp",
+            "Tiêu hóa",
+            "Nội tiết",
+            "Thần kinh",
+            "Ngoại tổng quát",
+            "Ngoại thần kinh",
+            "Chấn thương chỉnh hình",
+            "Ngoại tim mạch",
+            "Ngoại tiết niệu",
+            "Sản khoa",
+            "Phụ khoa",
+            "Nhi khoa",
+            "Sơ sinh",
+            "Tai Mũi Họng",
+            "Mắt",
+            "Da liễu",
+            "Răng Hàm Mặt",
+            "Ung bướu",
+            "Phục hồi chức năng",
+            "Y học cổ truyền",
+            "Truyền nhiễm"
+        ]
+
+        specialties = [Specialty(name=s) for s in data]
         times = [
             AppointmentTime(start_time=time(7, 0), end_time=time(8, 0)),
             AppointmentTime(start_time=time(8, 0), end_time=time(9, 0)),
@@ -101,4 +140,5 @@ if __name__ == '__main__':
             AppointmentTime(start_time=time(17, 0), end_time=time(18, 0)),
         ]
         db.session.add_all(times)
+        db.session.add_all(specialties)
         db.session.commit()

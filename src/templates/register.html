@@ -22,6 +22,18 @@
           Vui lòng điền các thông tin dưới đây để bắt đầu hành trình sức khỏe
           của bạn.
         </div>
+        <div class="avatarContainer mt-24">
+          <img id="avatar" class="avatarHolder" />
+        </div>
+        <div class="inputContainer">
+          <div class="inputTitle">Avatar</div>
+          <input
+            class="input"
+            id="avatarInput"
+            name="avatar"
+            type="file"
+          />
+        </div>
         <div class="inputRow mt-40">
           <div class="inputContainer">
             <div class="inputTitle">Họ và tên</div>
@@ -87,7 +99,7 @@
           <div class="inputTitle">Chuyên ngành</div>
           <div class="inputContainer">
             <div class="inputTitle"></div>
-            <select class="input" name="specialty_id">
+            <select class="input" name="specialtyId">
               {% for specialty in specialties %}
               <option value="{{ specialty.id }}">{{ specialty.name }}</option>
               {% endfor %}

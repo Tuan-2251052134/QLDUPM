@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="/static/css/register.css" rel="stylesheet" />
+    <link href="/static/css/doctor/update_profile.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="/static/js/doctor/update_profile.js"></script>
+  </head>
+  <body>
+    <form
+      method="POST"
+      action="/user/doctor/update-profile"
+      class="form"
+      id="form"
+      enctype="multipart/form-data"
+    >
+      <div class="title">Cập nhật thông tin mới</div>
+      <div class="avatarContainer mt-24">
+        <img id="avatar" src="{{user.avatar}}" class="avatarHolder" />
+      </div>
+      <div class="inputContainer">
+        <div class="inputTitle">Avatar</div>
+        <input class="input" id="avatarInput" name="avatar" type="file" />
+      </div>
+      <div class="inputRow mt-40">
+        <div class="inputContainer">
+          <div class="inputTitle">Họ và tên</div>
+          <input class="input" name="name" value="{{user.name}}" />
+        </div>
+        <div class="inputContainer">
+          <div class="inputTitle">Email liên hệ</div>
+          <input
+            class="input"
+            name="email"
+            type="email"
+            value="{{user.email}}"
+          />
+        </div>
+      </div>
+      <div class="inputRow mt-24">
+        <div class="inputContainer">
+          <div class="inputTitle">Mật khẩu</div>
+          <input class="input" type="password" name="password" />
+        </div>
+        <div class="inputContainer">
+          <div class="inputTitle">Số điên thoại</div>
+          <input
+            class="input"
+            name="phone"
+            type="number"
+            value="{{user.phone}}"
+          />
+        </div>
+      </div>
+      <div class="inputRow mt-24">
+        <div class="inputContainer">
+          <div class="inputTitle">Ngày sinh</div>
+          <input class="input" type="date" name="dob" value="user.dob" />
+        </div>
+        <div class="inputContainer">
+          <div class="inputTitle">Giới tính</div>
+          <select class="input" name="gender">
+            <option
+              value="1" 
+              {% if user.gender.value == 1 %}selected{% endif %}
+            >
+              Nữ
+            </option>
+            <option
+              value="0"
+              {% if user.gender.value == 0 %}selected{% endif %}
+            >
+              Nam
+            </option>
+          </select>
+        </div>
+        <input name="role" value="PATIENT" class="roleInput" id="roleInput" />
+        <div class="inputContainer">
+          <div class="inputTitle">Số CCCD</div>
+          <input
+            class="input"
+            name="idCard"
+            type="number"
+            value="{{user.id_card}}"
+          />
+        </div>
+      </div>
+      <div class="inputRow mt-24">
+        <div class="inputContainer">
+          <div class="inputTitle">Địa chỉ thường trú</div>
+          <input
+            name="address"
+            class="input"
+            type="text"
+            value="{{user.address}}"
+            placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
+          />
+        </div>
+      </div>
+      <div class="mt-40 doctorInfoContainer" id="doctorInfoContainer">
+        <div class="inputTitle">Chuyên ngành</div>
+        <div class="inputContainer">
+          <div class="inputTitle"></div>
+          <select class="input" name="specialtyId">
+            {% for specialty in specialties %}
+            <option
+              value="{{ specialty.id }}"
+              {% if user.doctor_info.specialty.id == specialty.id %}selected{% endif %}
+            >
+              {{ specialty.name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      {% for index in range(certCount) %}
+
+      <div class="mt-40 certifcateCard" id="certifcateCard">
+        <img src="/static/assets/certificate.svg" class="certifcateIcon" />
+        <div class="certificateContainer">
+          <div class="certifcateTitle">Chứng nhận hành nghề Y</div>
+          <div class="certificateInputContainer" id="certificateInputContainer">
+            <input
+              type="text"
+              hidden
+              id="certificateInput"
+              name="certificationsId"
+              value="{{ user.doctor_info.certifications[index].id if index < (user.doctor_info.certifications|length) else ''}}"
+            />
+            <input
+              type="file"
+              hidden
+              class="certificateInput"
+              name="certificationsFile"
+            />
+            <img src="/static/assets/picture.svg" />
+            <div class="certificateInputTitle">Tải hình ảnh lên</div>
+          </div>
+          <input
+            name="certificationsName"
+            class="input"
+            type="text"
+            placeholder="Tên chứng chỉ"
+            value="{{  user.doctor_info.certifications[index].name if index < (user.doctor_info.certifications|length) else ''}}"
+          />
+        </div>
+        <div>
+          {% if index < (user.doctor_info.certifications|length) %}
+          <div class="deleteButtonContainer">
+            <a
+              href="/user/doctor/delete-cert/{{ user.doctor_info.certifications[index].id }}"
+              class="deleteCert"
+              ><i class="fa-solid fa-x deleteIcon"></i
+            ></a>
+          </div>
+          <img
+            src="{{ user.doctor_info.certifications[index].url }}"
+            class="certificationImage"
+          />
+          {% else %}
+          <div class="deleteButtonContainer">
+            <a
+              href="/user/doctor/update-profile?certCount={{certCount-1}}"
+              class="deleteCert"
+              ><i class="fa-solid fa-x deleteIcon"></i
+            ></a>
+          </div>
+          <img
+            class="certificationImage"
+          />
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+      <a
+        class="updateButton"
+        href="/user/doctor/update-profile?certCount={{certCount+1}}"
+        >Thêm chứng chỉ</a
+      >
+      <div class="mt-64">
+        <button class="roleOption active" type="submit">
+          Đăng ký tài khoản
+          <img src="/static/assets/patient_icon.png" />
+        </button>
+      </div>
+    </form>
+  </body>
+</html>

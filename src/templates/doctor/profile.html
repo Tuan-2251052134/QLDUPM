@@ -44,14 +44,16 @@ endblock %} {% block main %}
         <img src="/static/assets/cert_icon.svg" class="icon" />
         <div class="personalTitle">Chứng chỉ chuyên môn</div>
       </div>
-
+      <div class="certsContainer">
       {% for cert in user.doctor_info.certifications%}
       <div>
         <div class="inputTitle">{{cert.name}}</div>
         <img src="{{cert.url}}" class="certImage" />
       </div>
       {% endfor %}
+      </div>
     </div>
   </div>
+  <a href="/user/doctor/update-profile" class="updateButton">Cập nhật thông tin</a>
 </div>
 {% endblock %}

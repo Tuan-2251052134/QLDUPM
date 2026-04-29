@@ -3,7 +3,7 @@ endblock %} {% block main %}
 <script src="/static/js/doctor/appointments.js"></script>
 <link href="/static/css/doctor/appointments.css" rel="stylesheet" />
 
-<form class="container" action="/user/doctor/appointment" method="post">
+<form class="container" action="/user/doctor/appointment?startDate={{daysOfWeek[0]}}" method="post">
   <div class="mainTitle">Lịch hàng tuần</div>
   <div class="stateContainer">
     <div class="stateOption">
@@ -50,7 +50,7 @@ endblock %} {% block main %}
             <div
               class="cell {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} cellActive {% endif %}"
               id="cell-{{ hour.__str__() }}-{{index.__str__() }}"
-              onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')"
+              {% if not showWarning %} onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')" {% endif %}
             >
               <p
                 class="title {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}"
@@ -75,8 +75,24 @@ endblock %} {% block main %}
       </tbody>
     </table>
   </div>
+
   <div class="buttonContainer">
-    <button class="confirmButton" type="submit">Xác nhận</button>
+    <a href="/user/doctor/appointment?startDate={{startDatePreviousWeek}}" class="navButton">Tuần trước</a>
+    {% if not showWarning %}
+      <button class="confirmButton" type="submit">Xác nhận</button>
+    {% endif %}
+    <a href="/user/doctor/appointment?startDate={{startDateNextWeek}}" class="navButton">Tuần sau</a>
   </div>
+  {% if showWarning %}
+  <div class="warning">
+    <img src="/static/assets/warning.svg" class="warningIcon"/>
+    <div>
+      <div class="warningTitle">Cảnh báo</div>
+      <div class="warningContent">
+        Khung giờ làm này đã bị vô hiệu hoá
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </form>
 {% endblock %}

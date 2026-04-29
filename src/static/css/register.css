@@ -137,6 +137,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .certificateContainer {
@@ -149,4 +150,16 @@ body {
   line-height: 20px;
   font-weight: 700;
   margin-top: 12px;
+}
+
+.avatarHolder {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  border-radius: 100%;
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
 }

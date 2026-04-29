@@ -1,7 +1,8 @@
 <link href="/static/css/layouts/header.css" rel="stylesheet" />
 <div class="headerContainer">
   <a href="/user/home" class="home">Aura Medical </a>
-  <div class="navigation">
-  </div>
-  <img src="/static/assets/banner.png" class="avatar"/>
+  <div class="navigation"></div>
+  {% if current_user.is_authenticated %}
+    <img src="{{current_user.avatar}}" class="avatar" />
+  {% endif %}
 </div>

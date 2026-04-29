@@ -41,7 +41,18 @@ const addDropFileEvent = () => {
   });
 };
 
+const addChangeAvatarEvent = () => {
+  const avatarInput = document.getElementById("avatarInput");
+  avatarInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    const avatar = document.getElementById("avatar");
+    avatar.src = url;
+  });
+};
+
 window.onload = () => {
   rolePickHanlder();
   addDropFileEvent();
+  addChangeAvatarEvent();
 };

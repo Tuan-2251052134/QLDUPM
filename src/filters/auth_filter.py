@@ -6,8 +6,10 @@ from functools import wraps
 
 def is_doctor(next):
     @wraps(next)
-    def check():
+    def check(id=None):
         if not current_user.is_authenticated or current_user.role != UserRole.DOCTOR:
             return redirect('/user/login')
+        if id:
+            return next(id)
         return next()
     return check

@@ -1,12 +1,15 @@
 {% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
 {% block content %}
 <link href="/static/css/detail_doctor.css" rel="stylesheet" />
+<script src="/static/js/detail_doctor.js"></script>
+<link href="/static/css/doctor/appointments.css" rel="stylesheet" />
+
 <div class="pageContainer">
   <div class="infoCard">
-    <img class="image" src="/static/assets/banner.png" />
+    <img class="image" src="{{user.avatar}}" />
     <div>
-      <div class="title">{{user[0][0].name}}</div>
-      <div class="specitalty">{{user[0][1]}}</div>
+      <div class="title">{{user.name}}</div>
+      <div class="specitalty">{{user.doctor_info.specialty.name}}</div>
     </div>
   </div>
   <div class="infoContainer">
@@ -17,17 +20,135 @@
       </div>
       <div>
         <div class="inputTitle">EMAIL CÁ NHÂN</div>
-        <div class="input">{{user[0][0].email}}</div>
+        <div class="input">{{user.email}}</div>
       </div>
-       <div>
+      <div>
         <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
-        <div class="input">{{user[0][0].phone}}</div>
+        <div class="input">{{user.phone}}</div>
       </div>
-       <div>
+      <div>
         <div class="inputTitle">SỐ CCCD</div>
-        <div class="input">{{user[0][0].id_card}}</div>
+        <div class="input">{{user.id_card}}</div>
+      </div>
+      <div>
+        <div class="inputTitle">ĐỊA CHỈ</div>
+        <div class="input">{{user.address}}</div>
+      </div>
+    </div>
+    <div class="infoForm">
+      <div class="personalTitleContainer">
+        <img src="/static/assets/cert_icon.svg" class="icon" />
+        <div class="personalTitle">Chứng chỉ chuyên môn</div>
+      </div>
+      <div class="certsContainer">
+        {% for cert in user.doctor_info.certifications%}
+        <div>
+          <div class="inputTitle">{{cert.name}}</div>
+          <img src="{{cert.url}}" class="certImage" />
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
+
+  <form class="container" action="/user/patient/appointment" method="post">
+    <input name="doctorId" hidden value="{{user.id}}"/>
+    <div class="mainTitle">Lịch hàng tuần</div>
+    <div class="stateContainer">
+      <div class="stateOption">
+        <div class="color avalableColor"></div>
+        <div class="stateValue">TRỐNG</div>
+      </div>
+      <div class="stateOption">
+        <div class="color selectedColor"></div>
+        <div class="stateValue">ĐÃ CHỌN</div>
+      </div>
+      <div class="stateOption">
+        <div class="color bookedColor"></div>
+        <div class="stateValue">ĐÃ ĐẶT</div>
+      </div>
+    </div>
+    <div class="tableContainer">
+      <table id="table" class="table">
+        <tbody>
+          <tr class="header">
+            {% for index in range(8) %}
+            <th
+              class="{% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} bottomBorder"
+            >
+              <div>
+                {% if index != 0 %}
+                <div class="date">{{ daysOfWeek[index-1] }}</div>
+                <div class="time">{% if index + 1 != 8%}Thứ  {{index + 1}}{% else %}Chủ nhật{% endif %}</div>
+                {% endif %}
+              </div>
+            </th>
+            {% endfor %}
+          </tr>
+          {% for hour in range(1,11) %} {% if hour == 6 %}
+          <tr class="afternoonShiftContainer">
+            <td colspan="8" class="afternoonShift">Ca chiều</td>
+          </tr>
+          {% else %}
+          <tr>
+            {% for index in range(8) %}
+            <td
+              class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} {% if hour != 10 %} bottomBorder {% endif %}"
+            >
+              {% if index == 0 %} {{ hour + 6 }}:00 - {{hour + 7}}:00 {% else %}
+              <div
+                class="cell 
+                  {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} 
+                    {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x' %}
+                      cellActive 
+                    {% else %}
+                      cellBooked
+                    {% endif %}
+                  {% endif %}"
+                id="cell-{{ hour.__str__() }}-{{index.__str__() }}"
+                {% 
+                  if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] 
+                    and registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x'
+                    and current_user.is_authenticated and current_user.role.value == "PATIENT" %} onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')" {% endif %}
+              >
+                <p
+                  class="cellTitle {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}"
+                >
+                  Đã chọn
+                </p>
+                <input
+                  class="cellCheckbox"
+                  type="checkbox"
+                  value="{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()]}}"
+                  name="appointmentId"
+                />
+              </div>
+              {% endif%}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endif %} {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if current_user.is_authenticated and current_user.role.value == "PATIENT" %}
+    <div class="inputContainer">
+        <div class="symptomInputTitle">Triệu trứng</div>
+        <input list="symptoms" class='input' name="symptom">
+        <datalist id="symptoms">
+          {% for symptom in symptoms %}
+          <option
+            value="{{ symptom.description }}"
+          >
+            {{ symptom.description }}
+          </option>
+          {% endfor %}
+        </datalist>
+        {% endif %}
+    </div>
+    <div class="buttonContainer">
+        <button class="confirmButton" type="submit">Xác nhận</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

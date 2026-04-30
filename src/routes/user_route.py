@@ -21,7 +21,31 @@ def load_user(user_id):
 def register():
     try:
         if request.method == "POST":
-            user_service.create_user(request=request)
+            dob = request.form.get('dob')
+            role = request.form.get('role')
+            name = request.form.get('name')
+            phone = request.form.get("phone")
+            email = request.form.get("email")
+            gender = request.form.get('gender')
+            id_card = request.form.get('id_card')
+            address = request.form.get('address')
+            password = request.form.get('password')
+            specialty_id = request.form.get('specialtyId')
+            user = User(
+                dob=dob,
+                role=role,
+                name=name,
+                phone=phone,
+                email=email,
+                gender=gender,
+                id_card=id_card,
+                address=address,
+                password=password)
+            avatar_file = request.files.get('avatar')
+            certification_name = request.form.get("certificationName")
+            certification_file = request.files.get('certification')
+            user_service.create_user(
+                user, specialty_id, avatar_file, certification_name, certification_file)
             return redirect('/user/login')
         specialties = specialty_service.get_specialties()
         return render_template('register.html', specialties=specialties)
@@ -57,18 +81,23 @@ def home():
 
 
 @blueprint.route("/user/find-doctor", methods=['GET'])
-def get_doctor_profile():
+def get_doctors():
     name = request.args.get('name')
     specialty_id = request.args.get('specialty_id')
     found_users = user_service.get_doctors(name, specialty_id)
-    print(found_users)
     return render_template('find_doctor.html', foundUsers=found_users)
 
 
 @blueprint.route("/user/find-doctor/<id>", methods=['GET'])
 def get_doctor_detail_profile(id):
-    user = user_service.get_doctor_detail(id)
-    return render_template('/detail_doctor.html', user=user)
+    user, dates, registered_appointment_map, symptoms = user_service.get_doctor_detail_witdh_worktime(
+        id)
+    print(user)
+    return render_template('/detail_doctor.html',
+                           user=user,
+                           daysOfWeek=dates,
+                           registeredAppointmentMap=registered_appointment_map,
+                           symptoms=symptoms)
 
 
 @blueprint.route('/user/doctor/profile', methods=['GET'])
@@ -95,8 +124,7 @@ def get_doctor_update_page():
 def delete_cert(id):
     certification = certification_service.get_certifcation_by_id(id)
     if certification.doctor_info_id != current_user.id:
-        return redirect("/user/home")   
-    
+        return redirect("/user/home")
+
     certification_service.delete_cert(certfication=certification)
     return redirect("/user/doctor/update-profile")
-

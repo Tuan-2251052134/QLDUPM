@@ -5,11 +5,11 @@
   <div class="cardsContainer">
     {% for user in foundUsers %}
     <div class="card">
-      <img class="cardImage" src="/static/assets/banner.png" />
+      <img class="cardImage" src="{{user.avatar}}" />
       <div>
-        <div class="name">{{user[1]}}</div>
-        <div class="specialty">{{user[2]}}</div>
-        <a href="/user/find-doctor/{{user[0]}}" class="detailButton">Chi tiết</a>
+        <div class="name">{{user.name}}</div>
+        <div class="specialty">{{user.doctor_info.specialty.name}}</div>
+        <a href="/user/find-doctor/{{user.id}}" class="detailButton">Chi tiết</a>
       </div>
     </div>
     {% endfor%}

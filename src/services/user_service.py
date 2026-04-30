@@ -1,6 +1,6 @@
 from models import User
 from utils import password_util
-from models import User, DoctorInfo, Specialty
+from models import User, DoctorInfo, Symptom
 from flask_login import login_user, current_user
 from exceptions import LoginException, CloudinaryException
 from utils import password_util
@@ -9,41 +9,20 @@ from enums.user_role import UserRole
 from enums.user_gender import UserGender
 from cloudinary import uploader
 from sqlalchemy.orm import joinedload
-from services import certification_service
+from services import certification_service, appointment_service
+from datetime import datetime, timedelta
 
 
-def create_user(request):
-    dob = request.form.get('dob')
-    role = request.form.get('role')
-    name = request.form.get('name')
-    phone = request.form.get("phone")
-    email = request.form.get("email")
-    gender = request.form.get('gender')
-    id_card = request.form.get('id_card')
-    address = request.form.get('address')
-    password = request.form.get('password')
-    specialty_id = request.form.get('specialtyId')
-    hash_password = password_util.hash(password)
+def create_user(user, specialty_id, avatar_file, certification_name, certification_file):
+    user.password = password_util.hash(user.password)
 
     try:
-        avatar_file = request.files.get('avatar')
         result = uploader.upload(avatar_file)
         avatar_url = result.get('secure_url')
     except Exception as ex:
         raise CloudinaryException()
 
-    user = User(
-        dob=dob,
-        role=role,
-        name=name,
-        phone=phone,
-        email=email,
-        avatar=avatar_url,
-        gender=gender,
-        id_card=id_card,
-        address=address,
-        password=hash_password)
-
+    user.avatar = avatar_url
     try:
         db.session.add(user)
         db.session.flush()
@@ -51,7 +30,8 @@ def create_user(request):
             doctorInfo = DoctorInfo(
                 id=user.id, specialty_id=specialty_id)
             db.session.add(doctorInfo)
-            certification_service.create_cert(user, request)
+            certification_service.create_cert(
+                user, certification_name, certification_file)
         db.session.commit()
     except Exception as ex:
         print(ex)
@@ -74,9 +54,9 @@ def login(request):
 
 
 def get_doctors(name, specialty_id, offset=0):
-    query = db.session.query(User.id, User.name, Specialty.name)
-    query = query.join(DoctorInfo, DoctorInfo.id == User.id)
-    query = query.join(Specialty, Specialty.id == DoctorInfo.specialty_id)
+    query = User.query.options(
+        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
+    )
 
     if name:
         query = query.filter(User.name.ilike(f"%{name}%"))
@@ -95,7 +75,17 @@ def get_doctor_detail(id):
         joinedload(User.doctor_info).joinedload(DoctorInfo.certifications),
         joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
     )
+
     return query.first()
+
+
+def get_doctor_detail_witdh_worktime(id):
+    _, dates, _, _ = appointment_service.get_days_of_week(
+        start_date=(datetime.now() + timedelta(7)).strftime("%d/%m/%Y"))
+    registered_appointment_map = appointment_service.get_appointments(
+        days_of_week=dates, user_id=id)
+    symptoms = Symptom.query.all()
+    return get_doctor_detail(id), dates, registered_appointment_map, symptoms
 
 
 def update_user(request):
@@ -129,7 +119,6 @@ def update_user(request):
             raise CloudinaryException()
 
     try:
-        print(user.gender)
         db.session.add(user)
         certification_service.create_or_update_certs(request)
         db.session.commit()

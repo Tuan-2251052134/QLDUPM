@@ -13,3 +13,14 @@ def is_doctor(next):
             return next(id)
         return next()
     return check
+
+
+def is_patient(next):
+    @wraps(next)
+    def check(id=None):
+        if not current_user.is_authenticated or current_user.role != UserRole.PATIENT:
+            return redirect('/user/login')
+        if id:
+            return next(id)
+        return next()
+    return check

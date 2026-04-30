@@ -1,6 +1,5 @@
 .headerContainer {
   height: 80px;
-  justify-content: space-between;
   display: flex;
   align-items: center;
   padding: 0px 22px;
@@ -10,6 +9,8 @@
   display: flex;
   gap: 32px;
   align-items: center;
+  width: 100%;
+  justify-content: center;
 }
 
 .navigationItem {
@@ -32,6 +33,8 @@
   font-size: 24px;
   line-height: 32px;
   text-decoration: none;
+  width: 200px;
+  display: block;
 }
 
 .avatar {

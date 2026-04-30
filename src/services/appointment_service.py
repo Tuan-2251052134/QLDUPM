@@ -1,5 +1,4 @@
 from datetime import timedelta, datetime
-from flask_login import current_user
 from enums.user_role import UserRole
 from enums.appointment_status import AppointmentStatus
 from models import Appointment, AppointmentTime
@@ -7,9 +6,9 @@ from configs.db_config import db
 from exceptions import CreateAppointmentException
 
 
-def get_days_of_week(request):
-    start_date = datetime.strptime(request.args.get(
-        "startDate"), "%d/%m/%Y") if request.args.get("startDate") else datetime.now()
+def get_days_of_week(start_date):
+    start_date = datetime.strptime(
+        start_date, "%d/%m/%Y") if start_date else datetime.now()
     start_of_week = start_date - timedelta(days=start_date.weekday())
 
     dates = [
@@ -25,9 +24,9 @@ def get_days_of_week(request):
     return start_date_previous_week, dates, start_date_next_week, show_warning
 
 
-def get_appointments(days_of_week):
+def get_appointments(days_of_week, user_id):
     registered_appointments = db.session.query(Appointment, AppointmentTime).filter(
-        Appointment.doctor_id == current_user.id,
+        Appointment.doctor_id == user_id,
         Appointment.date >= datetime.strptime(
             days_of_week[0], "%d/%m/%Y").date(),
         Appointment.date <= datetime.strptime(
@@ -38,12 +37,12 @@ def get_appointments(days_of_week):
 
     for registered_appointment in registered_appointments:
         registered_appointment_map[
-            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = True
+            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = registered_appointment[0].id if registered_appointment[0].status != AppointmentStatus.BOOKED else ["x", registered_appointment[0].symptom]
 
     return registered_appointment_map
 
 
-def create_appointments(datetimes, days_of_week):
+def create_appointments(datetimes, days_of_week, user_id):
     appointments = []
 
     for _datetime in datetimes:
@@ -56,20 +55,30 @@ def create_appointments(datetimes, days_of_week):
         appointment = Appointment(
             date=date,
             appointment_time_id=appointment_time_id,
-            doctor_id=current_user.id,
+            doctor_id=user_id,
             status=AppointmentStatus.AVAILABLE
         )
         appointments.append(appointment)
 
     try:
         Appointment.query.filter(
-            Appointment.doctor_id == current_user.id,
+            Appointment.doctor_id == user_id,
             Appointment.date >= datetime.strptime(
                 days_of_week[0], "%d/%m/%Y").date(),
             Appointment.date <= datetime.strptime(
-                days_of_week[6], "%d/%m/%Y").date()).delete()
+                days_of_week[6], "%d/%m/%Y").date(),
+            Appointment.status != AppointmentStatus.BOOKED).delete()
         db.session.add_all(appointments)
         db.session.commit()
     except Exception:
         db.session.rollback()
         raise CreateAppointmentException
+
+
+def apply_appointment(id, patient_id, symptom):
+    appointment = Appointment.query.filter_by(id=id).first()
+    appointment.patient_id = patient_id
+    appointment.symptom = symptom
+    appointment.status = AppointmentStatus.BOOKED
+    db.session.add(appointment)
+    db.session.commit()

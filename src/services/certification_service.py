@@ -14,10 +14,8 @@ def delete_cert(certfication):
     db.session.commit()
 
 
-def create_cert(user, request):
-    certification_name = request.form.get("certificationName")
+def create_cert(user, certification_name, certification_file):
     try:
-        certification_file = request.files.get('certification')
         result = uploader.upload(certification_file)
         url = result.get('secure_url')
         certification = Certification(

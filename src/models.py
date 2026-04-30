@@ -86,7 +86,6 @@ class Appointment(db.Model):
 
 class Symptom(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(40))
     description = db.Column(db.String(150))
 
 
@@ -125,6 +124,28 @@ if __name__ == '__main__':
             "Y học cổ truyền",
             "Truyền nhiễm"
         ]
+        symptoms = [
+            Symptom(description="Sốt"),
+            Symptom(description="Ho"),
+            Symptom(description="Đau đầu"),
+            Symptom(description="Đau họng"),
+            Symptom(description="Mệt mỏi"),
+            Symptom(description="Khó thở"),
+            Symptom(description="Đau ngực"),
+            Symptom(description="Chóng mặt"),
+            Symptom(description="Buồn nôn"),
+            Symptom(description="Nôn mửa"),
+            Symptom(description="Tiêu chảy"),
+            Symptom(description="Táo bón"),
+            Symptom(description="Đau bụng"),
+            Symptom(description="Mất ngủ"),
+            Symptom(description="Đau cơ"),
+            Symptom(description="Đau khớp"),
+            Symptom(description="Sổ mũi"),
+            Symptom(description="Nghẹt mũi"),
+            Symptom(description="Ớn lạnh"),
+            Symptom(description="Đổ mồ hôi nhiều"),
+        ]
 
         specialties = [Specialty(name=s) for s in data]
         times = [
@@ -141,4 +162,5 @@ if __name__ == '__main__':
         ]
         db.session.add_all(times)
         db.session.add_all(specialties)
+        db.session.add_all(symptoms)
         db.session.commit()

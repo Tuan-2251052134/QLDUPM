@@ -74,13 +74,16 @@ td {
   font-size: 20px;
 }
 
-.title {
+.cellTitle {
   color: white;
   display: none;
 }
 
 .titleShow {
-  display: inline;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
 }
 
 .cellCheckbox {
@@ -111,7 +114,8 @@ td {
   margin-top: 40px;
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
 }
 
 .stateContainer {
@@ -184,7 +188,14 @@ td {
   margin-bottom: 3px;
 }
 
-.warningContent{
+.warningContent {
   font-size: 14px;
   color: #793000;
+}
+
+.cellBooked {
+  background-color: green !important;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px green !important;
 }

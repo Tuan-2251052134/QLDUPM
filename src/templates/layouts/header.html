@@ -1,8 +1,16 @@
 <link href="/static/css/layouts/header.css" rel="stylesheet" />
 <div class="headerContainer">
-  <a href="/user/home" class="home">Aura Medical </a>
-  <div class="navigation"></div>
+  <div>
+    <a href="/user/home" class="home">Aura Medical </a>
+  </div>
+  <div class="navigation">
+    <a
+      href="/user/find-doctor"
+      class="navigationItem {% if request.path == '/user/find-doctor' %} navigationItemActive {% endif %}"
+      >Tìm kiếm bác sĩ</a
+    >
+  </div>
   {% if current_user.is_authenticated %}
-    <img src="{{current_user.avatar}}" class="avatar" />
+  <img src="{{current_user.avatar}}" class="avatar" />
   {% endif %}
 </div>

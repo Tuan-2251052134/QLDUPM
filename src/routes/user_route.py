@@ -76,16 +76,25 @@ def login():
 
 @blueprint.route('/user/home', methods=['GET'])
 def home():
-    specialties = specialty_service.get_specialties()
-    return render_template('home.html', specialties=specialties)
+    return render_template('home.html')
 
 
 @blueprint.route("/user/find-doctor", methods=['GET'])
 def get_doctors():
-    name = request.args.get('name')
-    specialty_id = request.args.get('specialty_id')
-    found_users = user_service.get_doctors(name, specialty_id)
-    return render_template('find_doctor.html', foundUsers=found_users)
+    name = request.args.get('name', "")
+    specialty_id = int(request.args.get('specialtyId', 0))
+    offset = int(request.args.get('offset', 0))
+    previous_offset = offset-1 if offset != 0 else 0
+    next_offset = offset + 1
+    found_users, specialties = user_service.get_doctors(
+        name, specialty_id, offset=offset)
+    return render_template('find_doctor.html',
+                           foundUsers=found_users,
+                           specialties=specialties,
+                           previousOffset=previous_offset,
+                           nextOffset=next_offset,
+                           name=name,
+                           specialtyId=specialty_id)
 
 
 @blueprint.route("/user/find-doctor/<id>", methods=['GET'])

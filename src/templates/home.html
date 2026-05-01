@@ -1,21 +1,4 @@
 {% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
 {% block content %}
 <link href="/static/css/home.css" rel="stylesheet" />
-<form action="/user/find-doctor" method="get" class="container">
-  <div class="searchContainer">
-    <div class="inputContainer">
-      <img src="/static/assets/search_icon.svg" />
-      <input class="input" name="name" />
-    </div>
-    <div class="inputContainer">
-      <img src="/static/assets/specialty_icon.svg" />
-      <select class="input" name="specialty_id">
-        {% for specialty in specialties %}
-        <option value="{{ specialty.id }}">{{ specialty.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <button type="submit" class="submitButton">Tìm kiếm ngay</button>
-  </div>
-</form>
 {% endblock %}

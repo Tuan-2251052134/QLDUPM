@@ -2,6 +2,23 @@
 {% block content %}
 <link href="/static/css/find_doctor.css" rel="stylesheet" />
 <div class="container">
+  <form action="/user/find-doctor" method="get" class="container">
+    <div class="searchContainer">
+      <div class="inputContainer">
+        <img src="/static/assets/search_icon.svg" />
+        <input class="input" name="name" />
+      </div>
+      <div class="inputContainer">
+        <img src="/static/assets/specialty_icon.svg" />
+        <select class="input" name="specialtyId">
+          {% for specialty in specialties %}
+          <option value="{{ specialty.id }}" {% if specialty.id == specialtyId %} selected {% endif %}>{{ specialty.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="submitButton">Tìm kiếm ngay</button>
+    </div>
+  </form>
   <div class="cardsContainer">
     {% for user in foundUsers %}
     <div class="card">
@@ -9,10 +26,24 @@
       <div>
         <div class="name">{{user.name}}</div>
         <div class="specialty">{{user.doctor_info.specialty.name}}</div>
-        <a href="/user/find-doctor/{{user.id}}" class="detailButton">Chi tiết</a>
+        <a href="/user/find-doctor/{{user.id}}" class="detailButton"
+          >Chi tiết</a
+        >
       </div>
     </div>
     {% endfor%}
+  </div>
+  <div class="navButtonsContainer">
+    <a
+      class="navButton"
+      href="/user/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{previousOffset}}"
+      >trang trước</a
+    >
+    <a
+      class="navButton"
+      href="/user/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{nextOffset}}"
+      >trang kế</a
+    >
   </div>
 </div>
 {% endblock %}

@@ -9,7 +9,7 @@ from enums.user_role import UserRole
 from enums.user_gender import UserGender
 from cloudinary import uploader
 from sqlalchemy.orm import joinedload
-from services import certification_service, appointment_service
+from services import certification_service, appointment_service, specialty_service
 from datetime import datetime, timedelta
 
 
@@ -54,20 +54,24 @@ def login(request):
 
 
 def get_doctors(name, specialty_id, offset=0):
-    query = User.query.options(
-        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
-    )
+    query = User.query
 
     if name:
         query = query.filter(User.name.ilike(f"%{name}%"))
 
     if specialty_id:
-        query = query.filter(DoctorInfo.specialty_id == specialty_id)
+        query = query.join(DoctorInfo).filter(
+            DoctorInfo.specialty_id == specialty_id)
+
+    query = query.options(
+        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
+    )
 
     query = query.filter(User.role == UserRole.DOCTOR)
-    query = query.limit(limit=10).offset(offset=offset)
+    query = query.limit(limit=6).offset(offset=offset*6)
+    specialties = specialty_service.get_specialties()
 
-    return query.all()
+    return query.all(), specialties
 
 
 def get_doctor_detail(id):

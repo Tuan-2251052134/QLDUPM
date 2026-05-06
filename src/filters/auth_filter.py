@@ -8,7 +8,7 @@ def is_doctor(next):
     @wraps(next)
     def check(id=None):
         if not current_user.is_authenticated or current_user.role != UserRole.DOCTOR:
-            return redirect('/user/login')
+            return redirect('/login')
         if id:
             return next(id)
         return next()
@@ -19,7 +19,7 @@ def is_patient(next):
     @wraps(next)
     def check(id=None):
         if not current_user.is_authenticated or current_user.role != UserRole.PATIENT:
-            return redirect('/user/login')
+            return redirect('/login')
         if id:
             return next(id)
         return next()

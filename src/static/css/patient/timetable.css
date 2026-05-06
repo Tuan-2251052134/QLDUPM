@@ -1,0 +1,18 @@
+.timetablenNavButtonsContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.timetableNavButton {
+  width: 120px;
+  border-radius: 12px;
+  background-color: #004e9f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  height: 40px;
+}

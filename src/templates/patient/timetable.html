@@ -1,58 +1,11 @@
-{% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
+{% extends "/layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
 {% block content %}
-<link href="/static/css/detail_doctor.css" rel="stylesheet" />
-<script src="/static/js/detail_doctor.js"></script>
+<link href="/static/css/public/detail_doctor.css" rel="stylesheet" />
 <link href="/static/css/doctor/appointments.css" rel="stylesheet" />
+<link href="/static/css/patient/timetable.css" rel="stylesheet" />
 
 <div class="pageContainer">
-  <div class="infoCard">
-    <img class="image" src="{{user.avatar}}" />
-    <div>
-      <div class="title">{{user.name}}</div>
-      <div class="specitalty">{{user.doctor_info.specialty.name}}</div>
-    </div>
-  </div>
-  <div class="infoContainer">
-    <div class="infoForm">
-      <div class="personalTitleContainer">
-        <image src="/static/assets/personal_info.svg" class="icon" />
-        <div class="personalTitle">Thông tin liên hệ</div>
-      </div>
-      <div>
-        <div class="inputTitle">EMAIL CÁ NHÂN</div>
-        <div class="input">{{user.email}}</div>
-      </div>
-      <div>
-        <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
-        <div class="input">{{user.phone}}</div>
-      </div>
-      <div>
-        <div class="inputTitle">SỐ CCCD</div>
-        <div class="input">{{user.id_card}}</div>
-      </div>
-      <div>
-        <div class="inputTitle">ĐỊA CHỈ</div>
-        <div class="input">{{user.address}}</div>
-      </div>
-    </div>
-    <div class="infoForm">
-      <div class="personalTitleContainer">
-        <img src="/static/assets/cert_icon.svg" class="icon" />
-        <div class="personalTitle">Chứng chỉ chuyên môn</div>
-      </div>
-      <div class="certsContainer">
-        {% for cert in user.doctor_info.certifications%}
-        <div>
-          <div class="inputTitle">{{cert.name}}</div>
-          <img src="{{cert.url}}" class="certImage" />
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
-  <form class="container" action="/user/patient/appointment" method="post">
-    <input name="doctorId" hidden value="{{user.id}}"/>
+  <div class="container" action="/patient/appointment" method="post">
     <div class="mainTitle">Lịch hàng tuần</div>
     <div class="stateContainer">
       <div class="stateOption">
@@ -96,7 +49,8 @@
               class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} {% if hour != 10 %} bottomBorder {% endif %}"
             >
               {% if index == 0 %} {{ hour + 6 }}:00 - {{hour + 7}}:00 {% else %}
-              <div
+              <a
+                {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} href="/find-doctor/{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][2]}}" {% endif %}
                 class="cell 
                   {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} 
                     {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x' %}
@@ -106,10 +60,6 @@
                     {% endif %}
                   {% endif %}"
                 id="cell-{{ hour.__str__() }}-{{index.__str__() }}"
-                {% 
-                  if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] 
-                    and registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x'
-                    and current_user.is_authenticated and current_user.role.value == "PATIENT" %} onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')" {% endif %}
               >
                 <p
                   class="cellTitle {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}"
@@ -122,7 +72,7 @@
                   value="{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()]}}"
                   name="appointmentId"
                 />
-              </div>
+              </a>
               {% endif%}
             </td>
             {% endfor %}
@@ -131,24 +81,18 @@
         </tbody>
       </table>
     </div>
-    {% if current_user.is_authenticated and current_user.role.value == "PATIENT" %}
-    <div class="inputContainer">
-        <div class="symptomInputTitle">Triệu trứng</div>
-        <input list="symptoms" class='input' name="symptom">
-        <datalist id="symptoms">
-          {% for symptom in symptoms %}
-          <option
-            value="{{ symptom.description }}"
-          >
-            {{ symptom.description }}
-          </option>
-          {% endfor %}
-        </datalist>
-        {% endif %}
-    </div>
-    <div class="buttonContainer">
-        <button class="confirmButton" type="submit">Xác nhận</button>
-    </div>
-  </form>
+    <div class="timetablenNavButtonsContainer">
+    <a
+      class="timetableNavButton"
+      href="/appointment/patient/timetable?startDate={{startDatePreviousWeek}}"
+      >trang trước</a
+    >
+    <a
+      class="timetableNavButton"
+      href="/appointment/patient/timetable?startDate={{startDateNextWeek}}"
+      >trang kế</a
+    >
+  </div>
+  </div>
 </div>
 {% endblock %}

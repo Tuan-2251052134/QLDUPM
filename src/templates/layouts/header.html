@@ -1,16 +1,31 @@
 <link href="/static/css/layouts/header.css" rel="stylesheet" />
 <div class="headerContainer">
   <div>
-    <a href="/user/home" class="home">Aura Medical </a>
+    <a href="/home" class="home">Aura Medical </a>
   </div>
   <div class="navigation">
     <a
-      href="/user/find-doctor"
-      class="navigationItem {% if request.path == '/user/find-doctor' %} navigationItemActive {% endif %}"
+      href="/find-doctor"
+      class="navigationItem {% if request.path == '/find-doctor' %} navigationItemActive {% endif %}"
       >Tìm kiếm bác sĩ</a
     >
+    {% if current_user.is_authenticated and current_user.role.value == "PATIENT" %}
+    <a
+      href="/appointment/patient/timetable"
+      class="navigationItem {% if request.path == '/appointment/patient/timetable' %} navigationItemActive {% endif %}"
+      >Thời gian biểu</a
+    >
+    {% endif %}
   </div>
   {% if current_user.is_authenticated %}
-  <img src="{{current_user.avatar}}" class="avatar" />
+  <div class="navButtonsContainer">
+    <img src="{{current_user.avatar}}" class="avatar" />
+    <a class="navButton" href="/logout">đăng xuất</a>
+  </div>
+  {% else %}
+  <div class="navButtonsContainer">
+    <a class="navButton" href="/login">đăng nhập</a>
+    <a class="navButton" href="/register">đăng ký</a>
+  </div>
   {% endif %}
 </div>

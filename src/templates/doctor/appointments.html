@@ -3,7 +3,7 @@ endblock %} {% block main %}
 <script src="/static/js/doctor/appointments.js"></script>
 <link href="/static/css/doctor/appointments.css" rel="stylesheet" />
 
-<form class="container" action="/user/doctor/appointment?startDate={{daysOfWeek[0]}}" method="post">
+<form class="container" action="/doctor/appointment?startDate={{daysOfWeek[0]}}" method="post">
   <div class="mainTitle">Lịch hàng tuần</div>
   <div class="stateContainer">
     <div class="stateOption">
@@ -89,11 +89,11 @@ endblock %} {% block main %}
   </div>
 
   <div class="buttonContainer">
-    <a href="/user/doctor/appointment?startDate={{startDatePreviousWeek}}" class="navButton">Tuần trước</a>
+    <a href="/doctor/appointment?startDate={{startDatePreviousWeek}}" class="navButton">Tuần trước</a>
     {% if not showWarning %}
       <button class="confirmButton" type="submit">Xác nhận</button>
     {% endif %}
-    <a href="/user/doctor/appointment?startDate={{startDateNextWeek}}" class="navButton">Tuần sau</a>
+    <a href="/doctor/appointment?startDate={{startDateNextWeek}}" class="navButton">Tuần sau</a>
   </div>
   {% if showWarning %}
   <div class="warning">

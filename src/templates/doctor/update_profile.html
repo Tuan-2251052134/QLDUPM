@@ -15,7 +15,7 @@
   <body>
     <form
       method="POST"
-      action="/user/doctor/update-profile"
+      action="/doctor/update-profile"
       class="form"
       id="form"
       enctype="multipart/form-data"
@@ -154,7 +154,7 @@
           {% if index < (user.doctor_info.certifications|length) %}
           <div class="deleteButtonContainer">
             <a
-              href="/user/doctor/delete-cert/{{ user.doctor_info.certifications[index].id }}"
+              href="/doctor/delete-cert/{{ user.doctor_info.certifications[index].id }}"
               class="deleteCert"
               ><i class="fa-solid fa-x deleteIcon"></i
             ></a>
@@ -166,7 +166,7 @@
           {% else %}
           <div class="deleteButtonContainer">
             <a
-              href="/user/doctor/update-profile?certCount={{certCount-1}}"
+              href="/doctor/update-profile?certCount={{certCount-1}}"
               class="deleteCert"
               ><i class="fa-solid fa-x deleteIcon"></i
             ></a>
@@ -180,7 +180,7 @@
       {% endfor %}
       <a
         class="updateButton"
-        href="/user/doctor/update-profile?certCount={{certCount+1}}"
+        href="/doctor/update-profile?certCount={{certCount+1}}"
         >Thêm chứng chỉ</a
       >
       <div class="mt-64">

@@ -1,15 +1,13 @@
 from flask import Blueprint, render_template, request, redirect
-from flask_login import current_user
-from services import user_service, specialty_service, certification_service
+from services import user_service, specialty_service
 from models import User
 from configs.security_config import login_manager
 from exceptions import LoginException, CloudinaryException
 from argon2.exceptions import InvalidHashError
 from enums.user_role import UserRole
-from filters.auth_filter import is_doctor
 
 
-blueprint = Blueprint('user', __name__)
+blueprint = Blueprint('common', __name__)
 
 
 @login_manager.user_loader
@@ -17,7 +15,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@blueprint.route('/user/register', methods=['POST', 'GET'])
+@blueprint.route('/register', methods=['POST', 'GET'])
 def register():
     try:
         if request.method == "POST":
@@ -31,6 +29,7 @@ def register():
             address = request.form.get('address')
             password = request.form.get('password')
             specialty_id = request.form.get('specialtyId')
+            hospital_id = request.form.get("hospitalId")
             user = User(
                 dob=dob,
                 role=role,
@@ -45,41 +44,44 @@ def register():
             certification_name = request.form.get("certificationName")
             certification_file = request.files.get('certification')
             user_service.create_user(
-                user, specialty_id, avatar_file, certification_name, certification_file)
-            return redirect('/user/login')
-        specialties = specialty_service.get_specialties()
-        return render_template('register.html', specialties=specialties)
+                user, specialty_id, avatar_file, certification_name, certification_file, hospital_id)
+            return redirect('/login')
+        specialties, hospitals = specialty_service.get_specialties()
+        print(specialties)
+        print(hospitals)
+        return render_template('/public/register.html', specialties=specialties, hospitals=hospitals)
     except CloudinaryException:
         error = "Có lỗi với cloudinary"
-        return render_template('register.html', error=error)
+        return render_template('/public/register.html', error=error)
     except Exception:
-        return render_template('register.html')
+        return render_template('/public/register.html')
 
 
-@blueprint.route('/user/login', methods=['POST', 'GET'])
+@blueprint.route('/login', methods=['POST', 'GET'])
 def login():
     try:
         if request.method == "GET":
-            return render_template('login.html')
+            return render_template('/public/login.html')
 
         role = user_service.login(request=request)
         if role == UserRole.DOCTOR:
-            return redirect('/user/doctor/profile')
+            return redirect('/doctor/profile')
 
         return redirect('home')
 
     except LoginException:
-        return render_template('login.html', showError=True)
+        return render_template('/public/login.html', showError=True)
     except InvalidHashError:
-        return render_template('login.html', showError=True)
+        return render_template('/public/login.html', showError=True)
 
 
-@blueprint.route('/user/home', methods=['GET'])
+@blueprint.route('/home', methods=['GET'])
 def home():
-    return render_template('home.html')
+    doctors, specialties = user_service.get_current_doctors()
+    return render_template('/public/home.html', doctors=doctors, specialties=specialties)
 
 
-@blueprint.route("/user/find-doctor", methods=['GET'])
+@blueprint.route("/find-doctor", methods=['GET'])
 def get_doctors():
     name = request.args.get('name', "")
     specialty_id = int(request.args.get('specialtyId', 0))
@@ -88,7 +90,7 @@ def get_doctors():
     next_offset = offset + 1
     found_users, specialties = user_service.get_doctors(
         name, specialty_id, offset=offset)
-    return render_template('find_doctor.html',
+    return render_template('public/find_doctor.html',
                            foundUsers=found_users,
                            specialties=specialties,
                            previousOffset=previous_offset,
@@ -97,43 +99,20 @@ def get_doctors():
                            specialtyId=specialty_id)
 
 
-@blueprint.route("/user/find-doctor/<id>", methods=['GET'])
+@blueprint.route("/find-doctor/<id>", methods=['GET'])
 def get_doctor_detail_profile(id):
-    user, dates, registered_appointment_map, symptoms = user_service.get_doctor_detail_witdh_worktime(
+    user, dates, registered_appointment_map, symptoms = user_service.get_doctor_detail_with_worktime(
         id)
-    print(user)
-    return render_template('/detail_doctor.html',
+    session_id = request.args.get("sessionId")
+    return render_template('/public/detail_doctor.html',
                            user=user,
                            daysOfWeek=dates,
                            registeredAppointmentMap=registered_appointment_map,
-                           symptoms=symptoms)
+                           symptoms=symptoms,
+                           sessionId=session_id)
 
 
-@blueprint.route('/user/doctor/profile', methods=['GET'])
-@is_doctor
-def get_doctor_page():
-    user = user_service.get_doctor_detail(current_user.id)
-    return render_template('doctor/profile.html', user=user)
-
-
-@blueprint.route('/user/doctor/update-profile', methods=['GET', "POST"])
-@is_doctor
-def get_doctor_update_page():
-    if request.method == 'POST':
-        user_service.update_user(request=request)
-    user = user_service.get_doctor_detail(current_user.id)
-    specialties = specialty_service.get_specialties()
-    cert_count = int(request.args.get(
-        "certCount", len(user.doctor_info.certifications)))
-    return render_template('doctor/update_profile.html', user=user, specialties=specialties, certCount=cert_count)
-
-
-@blueprint.route('/user/doctor/delete-cert/<id>', methods=["GET"])
-@is_doctor
-def delete_cert(id):
-    certification = certification_service.get_certifcation_by_id(id)
-    if certification.doctor_info_id != current_user.id:
-        return redirect("/user/home")
-
-    certification_service.delete_cert(certfication=certification)
-    return redirect("/user/doctor/update-profile")
+@blueprint.route("/logout", methods=["GET"])
+def logout():
+    user_service.logout()
+    return redirect(f"/login")

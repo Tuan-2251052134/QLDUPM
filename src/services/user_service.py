@@ -1,7 +1,7 @@
 from models import User
 from utils import password_util
 from models import User, DoctorInfo, Symptom
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from exceptions import LoginException, CloudinaryException
 from utils import password_util
 from configs.db_config import db
@@ -13,7 +13,7 @@ from services import certification_service, appointment_service, specialty_servi
 from datetime import datetime, timedelta
 
 
-def create_user(user, specialty_id, avatar_file, certification_name, certification_file):
+def create_user(user, specialty_id, avatar_file, certification_name, certification_file, hospital_id):
     user.password = password_util.hash(user.password)
 
     try:
@@ -28,7 +28,7 @@ def create_user(user, specialty_id, avatar_file, certification_name, certificati
         db.session.flush()
         if user.role == UserRole.DOCTOR.value:
             doctorInfo = DoctorInfo(
-                id=user.id, specialty_id=specialty_id)
+                id=user.id, specialty_id=specialty_id, hospital_id=hospital_id)
             db.session.add(doctorInfo)
             certification_service.create_cert(
                 user, certification_name, certification_file)
@@ -77,19 +77,18 @@ def get_doctors(name, specialty_id, offset=0):
 def get_doctor_detail(id):
     query = User.query.filter_by(id=id).options(
         joinedload(User.doctor_info).joinedload(DoctorInfo.certifications),
-        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
+        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty),
+        joinedload(User.doctor_info).joinedload(DoctorInfo.hospital)
     )
 
     return query.first()
 
 
-def get_doctor_detail_witdh_worktime(id):
-    _, dates, _, _ = appointment_service.get_days_of_week(
-        start_date=(datetime.now() + timedelta(7)).strftime("%d/%m/%Y"))
-    registered_appointment_map = appointment_service.get_appointments(
-        days_of_week=dates, user_id=id)
+def get_doctor_detail_with_worktime(id):
+    days_of_week, registered_appointment_map, _, _, _ = appointment_service.get_appointments_by_doctor(
+        start_date=(datetime.now() + timedelta(7)).strftime("%d/%m/%Y"), user_id=id)
     symptoms = Symptom.query.all()
-    return get_doctor_detail(id), dates, registered_appointment_map, symptoms
+    return get_doctor_detail(id), days_of_week, registered_appointment_map, symptoms
 
 
 def update_user(request):
@@ -129,3 +128,13 @@ def update_user(request):
     except Exception as ex:
         print(ex)
         db.session.rollback()
+
+
+def get_current_doctors():
+    return User.query.filter_by(role=UserRole.DOCTOR).options(
+        joinedload(User.doctor_info).joinedload(DoctorInfo.specialty)
+    ).limit(3).all(), specialty_service.get_current_specialties()
+
+
+def logout():
+    logout_user()

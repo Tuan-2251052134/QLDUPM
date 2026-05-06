@@ -1,9 +1,9 @@
 from datetime import timedelta, datetime
-from enums.user_role import UserRole
 from enums.appointment_status import AppointmentStatus
 from models import Appointment, AppointmentTime
 from configs.db_config import db
 from exceptions import CreateAppointmentException
+from services import payment_service
 
 
 def get_days_of_week(start_date):
@@ -24,9 +24,9 @@ def get_days_of_week(start_date):
     return start_date_previous_week, dates, start_date_next_week, show_warning
 
 
-def get_appointments(days_of_week, user_id):
+def get_appointments(days_of_week, user_id, key):
     registered_appointments = db.session.query(Appointment, AppointmentTime).filter(
-        Appointment.doctor_id == user_id,
+        getattr(Appointment, key) == user_id,
         Appointment.date >= datetime.strptime(
             days_of_week[0], "%d/%m/%Y").date(),
         Appointment.date <= datetime.strptime(
@@ -37,12 +37,26 @@ def get_appointments(days_of_week, user_id):
 
     for registered_appointment in registered_appointments:
         registered_appointment_map[
-            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = registered_appointment[0].id if registered_appointment[0].status != AppointmentStatus.BOOKED else ["x", registered_appointment[0].symptom]
+            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = registered_appointment[0].id if registered_appointment[0].status != AppointmentStatus.BOOKED else ["x", registered_appointment[0].symptom, registered_appointment[0].doctor_id]
 
     return registered_appointment_map
 
 
-def create_appointments(datetimes, days_of_week, user_id):
+def get_appointments_by_patient(start_date, user_id):
+    start_date_previous_week, days_of_week, start_date_next_week, _ = get_days_of_week(
+        start_date=start_date)
+    return days_of_week, get_appointments(
+        days_of_week=days_of_week, user_id=user_id, key="patient_id"), start_date_previous_week, start_date_next_week
+
+
+def get_appointments_by_doctor(start_date, user_id):
+    start_date_previous_week, days_of_week, start_date_next_week, show_warning = get_days_of_week(
+        start_date=start_date)
+    return days_of_week, get_appointments(days_of_week, user_id, "doctor_id"), start_date_previous_week, start_date_next_week, show_warning
+
+
+def create_appointments(datetimes, start_date, user_id):
+    _, days_of_week, _, _ = get_days_of_week(start_date=start_date)
     appointments = []
 
     for _datetime in datetimes:
@@ -76,9 +90,16 @@ def create_appointments(datetimes, days_of_week, user_id):
 
 
 def apply_appointment(id, patient_id, symptom):
-    appointment = Appointment.query.filter_by(id=id).first()
-    appointment.patient_id = patient_id
-    appointment.symptom = symptom
-    appointment.status = AppointmentStatus.BOOKED
-    db.session.add(appointment)
-    db.session.commit()
+    try:
+        appointment = Appointment.query.filter_by(id=id).first()
+        appointment.patient_id = patient_id
+        appointment.symptom = symptom
+        appointment.status = AppointmentStatus.BOOKED
+        session = payment_service.create_session(appointment_id=appointment.id)
+        print(session)
+        db.session.add(appointment)
+        db.session.commit()
+        return session
+    except Exception as ex:
+        print(ex)
+        db.session.rollback()

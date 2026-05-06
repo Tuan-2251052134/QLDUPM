@@ -1,8 +1,8 @@
 {% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
 {% block content %}
-<link href="/static/css/find_doctor.css" rel="stylesheet" />
+<link href="/static/css/public/find_doctor.css" rel="stylesheet" /> 
 <div class="container">
-  <form action="/user/find-doctor" method="get" class="container">
+  <form action="/find-doctor" method="get" class="container">
     <div class="searchContainer">
       <div class="inputContainer">
         <img src="/static/assets/search_icon.svg" />
@@ -26,7 +26,7 @@
       <div>
         <div class="name">{{user.name}}</div>
         <div class="specialty">{{user.doctor_info.specialty.name}}</div>
-        <a href="/user/find-doctor/{{user.id}}" class="detailButton"
+        <a href="/find-doctor/{{user.id}}" class="detailButton"
           >Chi tiết</a
         >
       </div>
@@ -36,12 +36,12 @@
   <div class="navButtonsContainer">
     <a
       class="navButton"
-      href="/user/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{previousOffset}}"
+      href="/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{previousOffset}}"
       >trang trước</a
     >
     <a
       class="navButton"
-      href="/user/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{nextOffset}}"
+      href="/find-doctor?name={{name}}&specialtyId={{specialtyId}}&offset={{nextOffset}}"
       >trang kế</a
     >
   </div>

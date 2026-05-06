@@ -154,19 +154,6 @@ td {
   background-color: green;
 }
 
-.navButton {
-  background-color: #e7e8e9;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  width: 128px;
-  border-width: 0;
-  color: #414753;
-  text-decoration: none;
-}
-
 .warning {
   padding: 32px;
   display: flex;

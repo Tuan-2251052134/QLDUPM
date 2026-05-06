@@ -1,10 +1,10 @@
 {% extends "layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock %}
 {% block content %}
-<link href="/static/css/login.css" rel="stylesheet" />
+<link href="/static/css/public/login.css" rel="stylesheet" />
 <div class="container">
   <div class="formContainer">
     <img src="/static/assets/login_banner.png" class="banner" />
-    <form action="/user/login" method="POST" class="form">
+    <form action="/login" method="POST" class="form">
       <div class="title">Chào mừng trở lại</div>
       <div class="subtitle">Đăng nhập vào tài khoản của bạn</div>
       <div class="inputTitle">ĐỊA CHỈ EMAIL</div>
@@ -26,7 +26,7 @@
         <div class="dividerContent">HOẶC</div>
         <div class="line"></div>
       </div>
-      <a href="/user/register" class="button registerButton">Đăng ký</a>
+      <a href="/register" class="button registerButton">Đăng ký</a>
     </form>
   </div>
 </div>

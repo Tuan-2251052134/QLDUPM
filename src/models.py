@@ -36,11 +36,16 @@ class DoctorInfo(db.Model):
         db.Integer,
         db.ForeignKey("specialty.id"),
         nullable=False)
+    hospital_id = db.Column(
+        db.Integer,
+        db.ForeignKey("hospital.id"),
+        nullable=False)
     certifications = db.relationship(
         "Certification",
         lazy="select"
     )
-    specialty = db.relationship("Specialty")
+    specialty = db.relationship("Specialty", lazy="select")
+    hospital = db.relationship("Hospital", lazy="select")
 
 
 class Certification(db.Model):
@@ -95,10 +100,86 @@ class Specialty(db.Model):
     image = db.Column(db.String(255))
 
 
+class Hospital(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(40))
+    address = db.Column(db.String(90))
+    bank_account_number = db.Column(db.String(20))
+
+
+class PaymentInfo(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    payment_id = db.Column(db.String(40), unique=True)
+    appointment_id = db.Column(
+        db.Integer,
+        db.ForeignKey("appointment.id"),
+        nullable=False
+    )
+
+
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()
         db.create_all()
+        hospitals = [
+            Hospital(name="BV Bạch Mai", address="Hà Nội",
+                     bank_account_number="100001"),
+            Hospital(name="BV Chợ Rẫy", address="TP.HCM",
+                     bank_account_number="100002"),
+            Hospital(name="BV 108", address="Hà Nội",
+                     bank_account_number="100003"),
+            Hospital(name="BV Việt Đức", address="Hà Nội",
+                     bank_account_number="100004"),
+            Hospital(name="BV Đại học Y Hà Nội", address="Hà Nội",
+                     bank_account_number="100005"),
+            Hospital(name="BV Nhi Trung Ương", address="Hà Nội",
+                     bank_account_number="100006"),
+            Hospital(name="BV Phụ sản Trung Ương", address="Hà Nội",
+                     bank_account_number="100007"),
+            Hospital(name="BV K Trung Ương", address="Hà Nội",
+                     bank_account_number="100008"),
+            Hospital(name="BV E", address="Hà Nội",
+                     bank_account_number="100009"),
+            Hospital(name="BV Thanh Nhàn", address="Hà Nội",
+                     bank_account_number="100010"),
+
+            Hospital(name="BV Nhân Dân 115", address="TP.HCM",
+                     bank_account_number="100011"),
+            Hospital(name="BV Đại học Y Dược TP.HCM",
+                     address="TP.HCM", bank_account_number="100012"),
+            Hospital(name="BV Từ Dũ", address="TP.HCM",
+                     bank_account_number="100013"),
+            Hospital(name="BV Nhi Đồng 1", address="TP.HCM",
+                     bank_account_number="100014"),
+            Hospital(name="BV Nhi Đồng 2", address="TP.HCM",
+                     bank_account_number="100015"),
+            Hospital(name="BV Ung Bướu TP.HCM", address="TP.HCM",
+                     bank_account_number="100016"),
+            Hospital(name="BV Gia Định", address="TP.HCM",
+                     bank_account_number="100017"),
+            Hospital(name="BV Quân y 175", address="TP.HCM",
+                     bank_account_number="100018"),
+
+            Hospital(name="BV Đa khoa Đà Nẵng", address="Đà Nẵng",
+                     bank_account_number="100019"),
+            Hospital(name="BV Trung ương Huế", address="Huế",
+                     bank_account_number="100020"),
+            Hospital(name="BV Cần Thơ", address="Cần Thơ",
+                     bank_account_number="100021"),
+            Hospital(name="BV Đa khoa Hải Phòng", address="Hải Phòng",
+                     bank_account_number="100022"),
+            Hospital(name="BV Đa khoa Quảng Ninh",
+                     address="Quảng Ninh", bank_account_number="100023"),
+            Hospital(name="BV Đa khoa Nghệ An", address="Nghệ An",
+                     bank_account_number="100024"),
+            Hospital(name="BV Đa khoa Thanh Hóa", address="Thanh Hóa",
+                     bank_account_number="100025"),
+            Hospital(name="BV Đa khoa Bình Dương",
+                     address="Bình Dương", bank_account_number="100026"),
+            Hospital(name="BV Đa khoa Đồng Nai", address="Đồng Nai",
+                     bank_account_number="100027"),
+            Hospital(name="BV Đa khoa Khánh Hòa", address="Khánh Hòa",
+                     bank_account_number="100028"),
+        ]
         data = [
             "Nội tổng quát",
             "Tim mạch",
@@ -163,4 +244,5 @@ if __name__ == '__main__':
         db.session.add_all(times)
         db.session.add_all(specialties)
         db.session.add_all(symptoms)
+        db.session.add_all(hospitals)
         db.session.commit()

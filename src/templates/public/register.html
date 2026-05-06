@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link href="/static/css/register.css" rel="stylesheet" />
-    <script src="/static/js/register.js"></script>
+    <link href="/static/css/public/register.css" rel="stylesheet" />
+    <script src="/static/js/public/register.js"></script>
   </head>
   <body>
     <div class="container">
       <img class="image" src="/static/assets/banner.png" />
       <form
         method="POST"
-        action="/user/register"
+        action="/register"
         class="form"
         id="form"
         enctype="multipart/form-data"
@@ -27,12 +27,7 @@
         </div>
         <div class="inputContainer">
           <div class="inputTitle">Avatar</div>
-          <input
-            class="input"
-            id="avatarInput"
-            name="avatar"
-            type="file"
-          />
+          <input class="input" id="avatarInput" name="avatar" type="file" />
         </div>
         <div class="inputRow mt-40">
           <div class="inputContainer">
@@ -98,10 +93,17 @@
         <div class="mt-40 doctorInfoContainer" id="doctorInfoContainer">
           <div class="inputTitle">Chuyên ngành</div>
           <div class="inputContainer">
-            <div class="inputTitle"></div>
             <select class="input" name="specialtyId">
               {% for specialty in specialties %}
               <option value="{{ specialty.id }}">{{ specialty.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mt-40 inputTitle">Bệnh viện</div>
+          <div class="inputContainer">
+            <select class="input" name="hospitalId">
+              {% for hospital in hospitals %}
+              <option value="{{ hospital.id }}">{{ hospital.name }}</option>
               {% endfor %}
             </select>
           </div>

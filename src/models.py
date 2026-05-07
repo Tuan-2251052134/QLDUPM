@@ -109,7 +109,7 @@ class Hospital(db.Model):
 
 class PaymentInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    payment_id = db.Column(db.String(40), unique=True)
+    payment_id = db.Column(db.String(255), nullable=False, unique=True)
     appointment_id = db.Column(
         db.Integer,
         db.ForeignKey("appointment.id"),

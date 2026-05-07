@@ -1,7 +1,11 @@
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
 import cloudinary
 
 cloudinary.config(
-    cloud_name="dx6brcofe",
-    api_key="716129595449135",
-    api_secret="drKg8CvyTumADgnoKln06YGRfss"
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET")
 )

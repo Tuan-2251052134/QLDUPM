@@ -95,11 +95,15 @@ def apply_appointment(id, patient_id, symptom):
         appointment.patient_id = patient_id
         appointment.symptom = symptom
         appointment.status = AppointmentStatus.BOOKED
-        session = payment_service.create_session(appointment_id=appointment.id)
-        print(session)
         db.session.add(appointment)
         db.session.commit()
-        return session
     except Exception as ex:
-        print(ex)
         db.session.rollback()
+        raise ex
+
+    session = payment_service.create_session(appointment_id=appointment.id)
+    return session
+
+
+def get_appointment_by_id(id):
+    return Appointment.query.filter_by(id=id).first()

@@ -1,0 +1,9 @@
+{% extends "/layouts/base.html" %} {% block title %}Trang đăng nhập{% endblock%} 
+{% block content %}
+<link href="/static/css/patient/payment_result.css" rel="stylesheet" />
+{% if isSuccess %}
+<h1 class="success text">Thanh toán thành công</h1>
+{% else %}
+<h1 class="fail text">Thanh toán thất bại</h1>
+{% endif %} 
+{% endblock %}

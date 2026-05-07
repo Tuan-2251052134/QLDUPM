@@ -1,4 +1,40 @@
 {% extends "doctor/layouts/base.html" %} {% block title %}Trang đăng nhập{%
 endblock %} {% block main %}
+<link href="/static/css/public/detail_doctor.css" rel="stylesheet" />
+<link href="/static/css/doctor/detail_appointment.css" rel="stylesheet" />
 
+<div class="pageContainer">
+  <div class="infoCard">
+    <img class="image" src="{{appointment.patient.avatar}}" />
+    <div>
+      <div class="title">{{appointment.patient.name}}</div>
+    </div>
+  </div>
+  <div class="infoForm">
+    <div class="personalTitleContainer">
+      <image src="/static/assets/personal_info.svg" class="icon" />
+      <div class="personalTitle">Thông tin liên hệ</div>
+    </div>
+    <div>
+      <div class="inputTitle">EMAIL CÁ NHÂN</div>
+      <div class="input">{{appointment.patient.email}}</div>
+    </div>
+    <div>
+      <div class="inputTitle">SỐ ĐIỆN THOẠI</div>
+      <div class="input">{{appointment.patient.phone}}</div>
+    </div>
+    <div>
+      <div class="inputTitle">SỐ CCCD</div>
+      <div class="input">{{appointment.patient.id_card}}</div>
+    </div>
+    <div>
+      <div class="inputTitle">ĐỊA CHỈ</div>
+      <div class="input">{{appointment.patient.address}}</div>
+    </div>
+    <div>
+      <div class="inputTitle">TRIỆU CHỨNG</div>
+      <div class="input">{{appointment.symptom}}</div>
+    </div>
+  </div>
+</div>
 {% endblock %}

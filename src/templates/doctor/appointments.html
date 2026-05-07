@@ -3,7 +3,7 @@ endblock %} {% block main %}
 <script src="/static/js/doctor/appointments.js"></script>
 <link href="/static/css/doctor/appointments.css" rel="stylesheet" />
 
-<form class="container" action="/doctor/appointment?startDate={{daysOfWeek[0]}}" method="post">
+<form class="container" action="/appointment/doctor?startDate={{daysOfWeek[0]}}" method="post">
   <div class="mainTitle">Lịch hàng tuần</div>
   <div class="stateContainer">
     <div class="stateOption">
@@ -57,15 +57,17 @@ endblock %} {% block main %}
                 {% endif%}
               {% endif %}"
               id="cell-{{ hour.__str__() }}-{{index.__str__() }}"
-              {% if not showWarning and (not registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] or (registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] and registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x')) %} onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')" {% endif %}
+              {% if not showWarning and 
+                (not registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] or 
+                (registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] and 
+                registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x')) %} onclick="onClick('cell-{{ hour.__str__() }}-{{ index.__str__() }}')" {% endif %}
             >
               <div
                 class="cellTitle {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} titleShow {% endif %}"
                 id="title"
               >
                 {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] and registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] == 'x'%}
-                  <div>Đã đặt</div>
-                  TC: {{ registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][1] }}
+                  <a href="/appointment/doctor/{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][1]}}">Đã đặt</a>
                 {% else %}
                   Đã chọn
                 {% endif %}
@@ -89,11 +91,11 @@ endblock %} {% block main %}
   </div>
 
   <div class="buttonContainer">
-    <a href="/doctor/appointment?startDate={{startDatePreviousWeek}}" class="navButton">Tuần trước</a>
+    <a href="/appointment/doctor?startDate={{startDatePreviousWeek}}" class="navButton">Tuần trước</a>
     {% if not showWarning %}
       <button class="confirmButton" type="submit">Xác nhận</button>
     {% endif %}
-    <a href="/doctor/appointment?startDate={{startDateNextWeek}}" class="navButton">Tuần sau</a>
+    <a href="/appointment/doctor?startDate={{startDateNextWeek}}" class="navButton">Tuần sau</a>
   </div>
   {% if showWarning %}
   <div class="warning">

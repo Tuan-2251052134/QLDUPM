@@ -4,6 +4,9 @@
   overflow: hidden;
   box-shadow: 0 12px 40px rgba(25, 28, 29, 0.06);
 }
+.container {
+  margin-bottom: 40px;
+}
 
 .table {
   width: 100%;

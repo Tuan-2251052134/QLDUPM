@@ -82,6 +82,7 @@ class Appointment(db.Model):
         db.ForeignKey("user.id"))
     symptom = db.Column(db.String(20))
     status = db.Column(db.Enum(AppointmentStatus), nullable=False)
+    patient = db.relationship("User", foreign_keys=[patient_id], lazy="select")
 
     __table_args__ = (
         UniqueConstraint('date', 'appointment_time_id', 'doctor_id', 'patient_id',

@@ -1,0 +1,9 @@
+.pageContainer {
+  flex: 1;
+}
+.infoCard {
+  margin-bottom: 20px;
+}
+.doctorBasePageContainer {
+  padding-right: 0px;
+}

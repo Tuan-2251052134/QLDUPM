@@ -4,6 +4,8 @@ from models import Appointment, AppointmentTime
 from configs.db_config import db
 from exceptions import CreateAppointmentException
 from services import payment_service
+from sqlalchemy.orm import joinedload
+
 
 
 def get_days_of_week(start_date):
@@ -37,7 +39,7 @@ def get_appointments(days_of_week, user_id, key):
 
     for registered_appointment in registered_appointments:
         registered_appointment_map[
-            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = registered_appointment[0].id if registered_appointment[0].status != AppointmentStatus.BOOKED else ["x", registered_appointment[0].symptom, registered_appointment[0].doctor_id]
+            f"{registered_appointment[0].date.strftime("%d/%m/%Y")}-{registered_appointment[1].id}"] = registered_appointment[0].id if registered_appointment[0].status != AppointmentStatus.BOOKED else ["x", registered_appointment[0].id ,registered_appointment[0].doctor_id]
 
     return registered_appointment_map
 
@@ -107,3 +109,8 @@ def apply_appointment(id, patient_id, symptom):
 
 def get_appointment_by_id(id):
     return Appointment.query.filter_by(id=id).first()
+
+def  get_appointment_by_id_width_patient(id):
+    return  Appointment.query.filter_by(id=id).options(
+        joinedload(Appointment.patient)
+    ).first()

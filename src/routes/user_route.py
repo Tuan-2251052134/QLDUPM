@@ -46,7 +46,8 @@ def register():
             user_service.create_user(
                 user, specialty_id, avatar_file, certification_name, certification_file, hospital_id)
             return redirect('/login')
-        specialties, hospitals = specialty_service.get_specialties()
+        specialties, hospitals = specialty_service.get_specialties_with_hospitals()
+        
         print(specialties)
         print(hospitals)
         return render_template('/public/register.html', specialties=specialties, hospitals=hospitals)

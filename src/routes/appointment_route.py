@@ -33,11 +33,19 @@ def get_appointment_page():
                            showWarning=show_warning)
 
 
-@blueprint.route('/appointment/doctor/<id>', methods=['GET', 'POST'])
+@blueprint.route('/appointment/doctor/<id>', methods=['GET'])
 @is_doctor
 def get_appointment_detail_page(id):
     appointment = appointment_service.get_appointment_by_id_width_patient(id)
     return render_template('doctor/detail_appointment.html',
+                           appointment=appointment)
+
+
+@blueprint.route('/appointment/patient/<id>', methods=['GET'])
+@is_patient
+def get_detail_appointment(id):
+    appointment = appointment_service.get_appointment_by_id_width_doctor(id)
+    return render_template('patient/detail_appointment.html',
                            appointment=appointment)
 
 

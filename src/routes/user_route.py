@@ -5,6 +5,8 @@ from configs.security_config import login_manager
 from exceptions import LoginException, CloudinaryException
 from argon2.exceptions import InvalidHashError
 from enums.user_role import UserRole
+from argon2.exceptions import VerifyMismatchError
+from filters.auth_filter import is_patient
 
 
 blueprint = Blueprint('common', __name__)
@@ -47,9 +49,6 @@ def register():
                 user, specialty_id, avatar_file, certification_name, certification_file, hospital_id)
             return redirect('/login')
         specialties, hospitals = specialty_service.get_specialties_with_hospitals()
-        
-        print(specialties)
-        print(hospitals)
         return render_template('/public/register.html', specialties=specialties, hospitals=hospitals)
     except CloudinaryException:
         error = "Có lỗi với cloudinary"
@@ -69,8 +68,9 @@ def login():
             return redirect('/doctor/profile')
 
         return redirect('home')
-
     except LoginException:
+        return render_template('/public/login.html', showError=True)
+    except VerifyMismatchError:
         return render_template('/public/login.html', showError=True)
     except InvalidHashError:
         return render_template('/public/login.html', showError=True)

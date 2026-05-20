@@ -27,7 +27,7 @@
           <tr class="header">
             {% for index in range(8) %}
             <th
-              class="{% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} bottomBorder"
+              class="{% if index == 0 %} firstColumn {% endif %} {% if index != 7 %} rightBorder {% endif %} bottomBorder"
             >
               <div>
                 {% if index != 0 %}
@@ -46,11 +46,11 @@
           <tr>
             {% for index in range(8) %}
             <td
-              class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 6 %} rightBorder {% endif %} {% if hour != 10 %} bottomBorder {% endif %}"
+              class="cellContainer {% if index == 0 %} firstColumn {% endif %} {% if index != 7 %} rightBorder {% endif %} {% if hour != 10 %} bottomBorder {% endif %}"
             >
               {% if index == 0 %} {{ hour + 6 }}:00 - {{hour + 7}}:00 {% else %}
               <a
-                {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} href="/find-doctor/{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][2]}}" {% endif %}
+                {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} href="/appointment/patient/{{registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][1]}}" {% endif %}
                 class="cell 
                   {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()] %} 
                     {% if registeredAppointmentMap[daysOfWeek[index].__str__()+'-'+hour.__str__()][0] != 'x' %}

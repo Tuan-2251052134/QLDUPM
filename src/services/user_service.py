@@ -70,7 +70,6 @@ def get_doctors(name, specialty_id, offset=0):
     query = query.filter(User.role == UserRole.DOCTOR)
     query = query.limit(limit=6).offset(offset=offset*6)
     specialties = specialty_service.get_specialties()
-    print(specialties)
     return query.all(), specialties
 
 
